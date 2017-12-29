@@ -18,4 +18,9 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Urbagestion.DataAccess\Urbagestion.DataAccess.csproj" />
+    <ProjectReference Include="..\Urbagestion.Data\Urbagestion.Model.csproj" />
+  </ItemGroup>
+
 </Project>

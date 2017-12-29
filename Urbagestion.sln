@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urbagestion.UI.Web", "Urbagestion.UI.Web\Urbagestion.UI.Web.csproj", "{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.UI.Web", "Urbagestion.UI.Web\Urbagestion.UI.Web.csproj", "{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Model", "Urbagestion.Data\Urbagestion.Model.csproj", "{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urbagestion.DataAccess", "Urbagestion.DataAccess\Urbagestion.DataAccess.csproj", "{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
