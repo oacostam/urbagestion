@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.UI.Web", "Urbag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Model", "Urbagestion.Data\Urbagestion.Model.csproj", "{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urbagestion.DataAccess", "Urbagestion.DataAccess\Urbagestion.DataAccess.csproj", "{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.DataAccess", "Urbagestion.DataAccess\Urbagestion.DataAccess.csproj", "{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{4D24A9E8-AC0F-42C1-9034-C34BC6881C5E}"
+	ProjectSection(SolutionItems) = preProject
+		Database\CreateDatabaseAtLocation.sql = Database\CreateDatabaseAtLocation.sql
+		Database\Data-Migrations-commands.txt = Database\Data-Migrations-commands.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

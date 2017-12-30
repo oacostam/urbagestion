@@ -13,6 +13,7 @@ namespace Urbagestion.DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
 
         public EntityEntry<T> EntityEntry<T>(T entity) where T : Entity
@@ -44,12 +45,6 @@ namespace Urbagestion.DataAccess
         public void SetAdded(object entity)
         {
             Entry(entity).State = EntityState.Added;
-        }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-            builder.Entity<Facility>().ToTable(nameof(Facility));
         }
     }
 }

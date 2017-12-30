@@ -8,7 +8,7 @@ namespace Urbagestion.Model.Models
 {
     public class Facility : Entity, IValidatableObject
     {
-        [Required] public string Name { get; set; }
+        [Required, ConcurrencyCheck, MinLength(5, ErrorMessageResourceName = "Facility_NameMinLen", ErrorMessageResourceType = typeof(Urbagestion_Model_Resource))] public string Name { get; set; }
 
         public decimal? Price { get; set; }
 

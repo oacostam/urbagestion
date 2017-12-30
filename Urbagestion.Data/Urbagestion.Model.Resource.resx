@@ -135,4 +135,7 @@
   <data name="Reservation_User_NotNull" xml:space="preserve">
     <value>Usuario no válido.</value>
   </data>
+  <data name="Facility_NameMinLen" xml:space="preserve">
+    <value>El nombre debe tener un mínimo de 5 caracteres.</value>
+  </data>
 </root>

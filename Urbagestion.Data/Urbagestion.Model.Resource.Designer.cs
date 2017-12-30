@@ -61,6 +61,15 @@ namespace Urbagestion.Model {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El nombre debe tener un mínimo de 5 caracteres..
+        /// </summary>
+        internal static string Facility_NameMinLen {
+            get {
+                return ResourceManager.GetString("Facility_NameMinLen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instalación no válida..
         /// </summary>
         internal static string Reservation_Facility_NotNull {
