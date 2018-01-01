@@ -120,8 +120,14 @@
   <data name="HomeController_About" xml:space="preserve">
     <value>Aplicacion para la gestión de recursos comunitarios.</value>
   </data>
+  <data name="HomeController_Book" xml:space="preserve">
+    <value>Reservar</value>
+  </data>
   <data name="HomeController_Contact" xml:space="preserve">
     <value>somecontact@domain.com</value>
+  </data>
+  <data name="HomeController_Home" xml:space="preserve">
+    <value>Inicio</value>
   </data>
   <data name="_Layout_ToogleNavigation" xml:space="preserve">
     <value>Alternar navegación</value>

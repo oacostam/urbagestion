@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Urbagestion.Model.Common;
@@ -13,7 +12,6 @@ namespace Urbagestion.DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            
         }
 
         public EntityEntry<T> EntityEntry<T>(T entity) where T : Entity
@@ -26,11 +24,10 @@ namespace Urbagestion.DataAccess
             return SaveChanges();
         }
 
-        public IQueryable<T> GetDbSet<T>() where T : Entity
+        public DbSet<T> GetDbSet<T>() where T : Entity
         {
             return Set<T>();
         }
-
 
         public void SetModified(object entity)
         {

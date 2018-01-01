@@ -79,11 +79,29 @@ namespace Urbagestion.UI.Web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reservar.
+        /// </summary>
+        public static string HomeController_Book {
+            get {
+                return ResourceManager.GetString("HomeController_Book", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to somecontact@domain.com.
         /// </summary>
         public static string HomeController_Contact {
             get {
                 return ResourceManager.GetString("HomeController_Contact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inicio.
+        /// </summary>
+        public static string HomeController_Home {
+            get {
+                return ResourceManager.GetString("HomeController_Home", resourceCulture);
             }
         }
     }

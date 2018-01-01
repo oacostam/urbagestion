@@ -12,7 +12,7 @@ namespace Urbagestion.Model.Interfaces
 
         int Complete();
 
-        IQueryable<T> GetDbSet<T>() where T : Entity;
+        DbSet<T> GetDbSet<T>() where T : Entity;
 
         void SetModified(object entity);
 

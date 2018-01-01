@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Urbagestion.DataAccess;
+using Urbagestion.Model.Bussines.Implementation;
+using Urbagestion.Model.Bussines.Interfaces;
+using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
 using Urbagestion.UI.Web.Services;
 
@@ -31,6 +35,11 @@ namespace Urbagestion.UI.Web
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IUnitOfWork, ApplicationDbContext>();
+            services.AddTransient<IFacilityManagement, FacilityManagement>();
+            
+            // Add automapper service.
+            services.AddAutoMapper();
 
             services.AddMvc();
         }
