@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Urbagestion.Model.Models;
+﻿using Urbagestion.Model.Models;
+using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Interfaces
 {
     public interface IFacilityManagement
     {
-        IEnumerable<Facility> GetAll(int page, int size, out int total);
+        Facility[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder);
         Facility CreateFacility(Facility facility);
         Facility Create(Facility entity);
         void Delete(Facility entity);

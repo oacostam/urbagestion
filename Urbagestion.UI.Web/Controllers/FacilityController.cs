@@ -2,29 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
+using Urbagestion.UI.Web.Models;
+using Urbagestion.UI.Web.Models.FacilityViewModels;
+using Urbagestion.UI.Web.Models.ManageViewModels;
+using Urbagestion.Util;
 
 namespace Urbagestion.UI.Web.Controllers
 {
     public class FacilityController : Controller
     {
-        private IFacilityManagement facilityManagement;
+        private readonly IFacilityManagement facilityManagement;
 
         public FacilityController(IFacilityManagement facilityManagement)
         {
             this.facilityManagement = facilityManagement;
         }
 
-        // GET: Facility
-        public ActionResult Index()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(RequestBase request)
         {
-            int total;
-            var facilities = facilityManagement.GetAll(1, 20, out total);
-            return View(facilities);
+            try
+            {
+                var facilities = facilityManagement.GetAll(request.Page, request.Size, out var total, request.SortField, request.Order);
+                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>(){Result = Mapper.Map<Facility[], FacilityIndexViewModel[]>(facilities), Total = total};
+                return View(result);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                PageResult<IndexViewModel[]> result = new PageResult<IndexViewModel[]>() {ErrorMessage = e.Message};
+                return View(result);
+            }
+            
         }
 
         // GET: Facility/Details/5

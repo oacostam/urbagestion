@@ -1,6 +1,11 @@
-﻿body {
+﻿.form-link {
+    font-family: "Verdana"
+} 
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+    font-family: "Verdana"
 }
 
 /* Wrapping element */

@@ -6,27 +6,14 @@ using Urbagestion.Model.Common;
 
 namespace Urbagestion.Model.Models
 {
-    public class Facility : Entity, IValidatableObject
+    public class Facility : Entity
     {
-        [Required, ConcurrencyCheck, MinLength(5, ErrorMessageResourceName = "Facility_NameMinLen", ErrorMessageResourceType = typeof(Urbagestion_Model_Resource))] public string Name { get; set; }
+        public string Name { get; set; }
 
         public decimal? Price { get; set; }
 
-        [Required] public TimeSpan OpensAt { get; set; }
+        public TimeSpan OpensAt { get; set; }
 
-        [Required] public TimeSpan CloseAt { get; set; }
-
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (string.IsNullOrEmpty(Name))
-                yield return new ValidationResult(Urbagestion_Model_Resource.SharedResources_Name_NotNull);
-            if (OpensAt == TimeSpan.Zero)
-                yield return new ValidationResult(Urbagestion_Model_Resource
-                    .SharedResource_OpensAt_NotNull);
-            if (CloseAt == TimeSpan.Zero)
-                yield return new ValidationResult(Urbagestion_Model_Resource
-                    .SharedResource_OpensAt_NotNull);
-        }
+        public TimeSpan CloseAt { get; set; }
     }
 }

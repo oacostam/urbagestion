@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Facility_NameMinLen" xml:space="preserve">
+    <value>El nombre debe tener un mínimo de 5 caracteres.</value>
+  </data>
   <data name="HomeController_About" xml:space="preserve">
     <value>Aplicacion para la gestión de recursos comunitarios.</value>
   </data>
@@ -129,7 +132,40 @@
   <data name="HomeController_Home" xml:space="preserve">
     <value>Inicio</value>
   </data>
+  <data name="Reservation_Facility_NotNull" xml:space="preserve">
+    <value>Instalación no válida.</value>
+  </data>
+  <data name="Reservation_ReservationDate_NotInPast" xml:space="preserve">
+    <value>La fecha de la reserva no puede ser anterior a hoy.</value>
+  </data>
+  <data name="Reservation_StartsNotGreaterThanEnds" xml:space="preserve">
+    <value>La hora de inicio no puede ser posterior ni igual a la hora de fin</value>
+  </data>
+  <data name="Reservation_User_NotNull" xml:space="preserve">
+    <value>Usuario no válido.</value>
+  </data>
+  <data name="SharedResources_Name_NotNull" xml:space="preserve">
+    <value>Debe especificar un nombre.</value>
+  </data>
+  <data name="SharedResource_OpensAt_NotNull" xml:space="preserve">
+    <value>Debe especificar una hora de apertura.</value>
+  </data>
   <data name="_Layout_ToogleNavigation" xml:space="preserve">
     <value>Alternar navegación</value>
+  </data>
+  <data name="ModelBase_CreatedByNotEmpty" xml:space="preserve">
+    <value>No se ha especificado al creador del registro.</value>
+  </data>
+  <data name="ModelBase_CreatedByLabel" xml:space="preserve">
+    <value>Creado por:</value>
+  </data>
+  <data name="ModelBase_CreationdDateLabel" xml:space="preserve">
+    <value>Fecha de creación:</value>
+  </data>
+  <data name="ModelBase_IsActiveLabel" xml:space="preserve">
+    <value>Borrado:</value>
+  </data>
+  <data name="ModelBase_UpdatedDateLabel" xml:space="preserve">
+    <value>Actualizado por:</value>
   </data>
 </root>

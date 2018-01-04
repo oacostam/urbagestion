@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Urbagestion.DataAccess\Urbagestion.DataAccess.csproj" />
     <ProjectReference Include="..\Urbagestion.Data\Urbagestion.Model.csproj" />
+    <ProjectReference Include="..\Urbagestion.Util\Urbagestion.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\" />
     <Folder Include="Profiles\" />
   </ItemGroup>
 

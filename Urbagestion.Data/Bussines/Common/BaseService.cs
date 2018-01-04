@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
+using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Common
 {
@@ -16,12 +16,15 @@ namespace Urbagestion.Model.Bussines.Common
             UnitOfWork = unitOfWork;
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         public virtual T Create(T entity)
         {
-            if (entity == null)
-            {
-                throw new ApplicationException();
-            }
+            if (entity == null) throw new ApplicationException();
             UnitOfWork.GetDbSet<T>().Add(entity);
             UnitOfWork.SetAdded(entity);
             UnitOfWork.Complete();
@@ -35,11 +38,17 @@ namespace Urbagestion.Model.Bussines.Common
             UnitOfWork.Complete();
         }
 
-        public IEnumerable<T> GetAll(int page, int size, out int total)
+        public T[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder)
         {
             total = UnitOfWork.GetDbSet<T>().Count();
-            int skipRows = (page - 1) * size;
-            return UnitOfWork.GetDbSet<T>().OrderBy(c => c.Id).Skip(skipRows).Take(size).ToList();
+            var skipRows = (page - 1) * size;
+            var query = (IQueryable<T>) UnitOfWork.GetDbSet<T>();
+            var pi = typeof(T).GetProperty(orderBy);
+            if (pi != null)
+                query = sortOrder == SortOrder.Asc
+                    ? query.OrderBy(x => pi.GetValue(x, null))
+                    : query.OrderByDescending(x => pi.GetValue(x, null));
+            return query.Skip(skipRows).Take(size).ToArray();
         }
 
         public virtual T Update(T entity)
@@ -66,16 +75,7 @@ namespace Urbagestion.Model.Bussines.Common
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                UnitOfWork?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (disposing) UnitOfWork?.Dispose();
         }
     }
 }

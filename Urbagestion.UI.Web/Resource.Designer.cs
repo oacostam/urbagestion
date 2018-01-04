@@ -70,6 +70,15 @@ namespace Urbagestion.UI.Web {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El nombre debe tener un mínimo de 5 caracteres..
+        /// </summary>
+        public static string Facility_NameMinLen {
+            get {
+                return ResourceManager.GetString("Facility_NameMinLen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Aplicacion para la gestión de recursos comunitarios..
         /// </summary>
         public static string HomeController_About {
@@ -102,6 +111,105 @@ namespace Urbagestion.UI.Web {
         public static string HomeController_Home {
             get {
                 return ResourceManager.GetString("HomeController_Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creado por:.
+        /// </summary>
+        public static string ModelBase_CreatedByLabel {
+            get {
+                return ResourceManager.GetString("ModelBase_CreatedByLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No se ha especificado al creador del registro..
+        /// </summary>
+        public static string ModelBase_CreatedByNotEmpty {
+            get {
+                return ResourceManager.GetString("ModelBase_CreatedByNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fecha de creación:.
+        /// </summary>
+        public static string ModelBase_CreationdDateLabel {
+            get {
+                return ResourceManager.GetString("ModelBase_CreationdDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Borrado:.
+        /// </summary>
+        public static string ModelBase_IsActiveLabel {
+            get {
+                return ResourceManager.GetString("ModelBase_IsActiveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actualizado por:.
+        /// </summary>
+        public static string ModelBase_UpdatedDateLabel {
+            get {
+                return ResourceManager.GetString("ModelBase_UpdatedDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instalación no válida..
+        /// </summary>
+        public static string Reservation_Facility_NotNull {
+            get {
+                return ResourceManager.GetString("Reservation_Facility_NotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La fecha de la reserva no puede ser anterior a hoy..
+        /// </summary>
+        public static string Reservation_ReservationDate_NotInPast {
+            get {
+                return ResourceManager.GetString("Reservation_ReservationDate_NotInPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La hora de inicio no puede ser posterior ni igual a la hora de fin.
+        /// </summary>
+        public static string Reservation_StartsNotGreaterThanEnds {
+            get {
+                return ResourceManager.GetString("Reservation_StartsNotGreaterThanEnds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usuario no válido..
+        /// </summary>
+        public static string Reservation_User_NotNull {
+            get {
+                return ResourceManager.GetString("Reservation_User_NotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe especificar una hora de apertura..
+        /// </summary>
+        public static string SharedResource_OpensAt_NotNull {
+            get {
+                return ResourceManager.GetString("SharedResource_OpensAt_NotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe especificar un nombre..
+        /// </summary>
+        public static string SharedResources_Name_NotNull {
+            get {
+                return ResourceManager.GetString("SharedResources_Name_NotNull", resourceCulture);
             }
         }
     }

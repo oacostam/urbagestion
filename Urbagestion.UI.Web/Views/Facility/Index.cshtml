@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Urbagestion.Model.Models.Facility>
+﻿@model PageResult<Urbagestion.UI.Web.Models.FacilityViewModels.FacilityIndexViewModel[]>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,40 +13,37 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.DisplayNameFor(model => model.Result[0].Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Price)
+                    @Html.DisplayNameFor(model => model.Result[0].Price)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OpensAt)
+                    @Html.DisplayNameFor(model => model.Result[0].OpensAt)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CloseAt)
+                    @Html.DisplayNameFor(model => model.Result[0].CloseAt)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Id)
+                    @Html.DisplayNameFor(model => model.Result[0].IsActive)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.IsActive)
+                    @Html.DisplayNameFor(model => model.Result[0].CreationdDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreationdDate)
+                    @Html.DisplayNameFor(model => model.Result[0].CreatedBy)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreatedBy)
+                    @Html.DisplayNameFor(model => model.Result[0].UpdatedDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UpdatedDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UpdatedBy)
+                    @Html.DisplayNameFor(model => model.Result[0].UpdatedBy)
                 </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Result) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

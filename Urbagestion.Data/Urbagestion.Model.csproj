@@ -32,4 +32,8 @@
     <Folder Include="Bussines\Claims\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Urbagestion.Util\Urbagestion.Util.csproj" />
+  </ItemGroup>
+
 </Project>

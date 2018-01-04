@@ -22,13 +22,14 @@ namespace Urbagestion.Model.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (User == null) yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_User_NotNull);
-            if (Facility == null)
-                yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_Facility_NotNull);
-            if (ReservationDate < DateTime.Now)
-                yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_ReservationDate_NotInPast);
-            if (Starts >= Ends)
-                yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_StartsNotGreaterThanEnds);
+            throw new NotImplementedException();
+            //if (User == null) yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_User_NotNull);
+            //if (Facility == null)
+            //    yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_Facility_NotNull);
+            //if (ReservationDate < DateTime.Now)
+            //    yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_ReservationDate_NotInPast);
+            //if (Starts >= Ends)
+            //    yield return new ValidationResult(Urbagestion_Model_Resource.Reservation_StartsNotGreaterThanEnds);
         }
     }
 }
