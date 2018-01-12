@@ -10,6 +10,8 @@ using Urbagestion.Model.Bussines.Implementation;
 using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
+using Urbagestion.UI.Web.Data;
+using Urbagestion.UI.Web.Security;
 using Urbagestion.UI.Web.Services;
 
 namespace Urbagestion.UI.Web
@@ -26,26 +28,26 @@ namespace Urbagestion.UI.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Configuration);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<User, Role>(a => a.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
+            services.AddTransient<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory<User>>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IUnitOfWork, ApplicationDbContext>();
             services.AddTransient<IFacilityManagement, FacilityManagement>();
-            
             // Add automapper service.
             services.AddAutoMapper();
-
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -68,6 +70,7 @@ namespace Urbagestion.UI.Web
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
+            await MasterData.InitializeFacilityeDatabaseAsync(app.ApplicationServices);
         }
     }
 }

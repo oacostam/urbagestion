@@ -7,7 +7,7 @@ namespace Urbagestion.Model.Models
 {
     public class Reservation : Entity
     {
-        [Required] public ApplicationUser User { get; set; }
+        [Required] public User User { get; set; }
         
         [Required] public Facility Facility { get; set; }
 

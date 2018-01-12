@@ -7,10 +7,10 @@ using Urbagestion.Model.Models;
 
 namespace Urbagestion.DataAccess
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IUnitOfWork
+    public class ApplicationDbContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IUnitOfWork
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
@@ -42,6 +42,13 @@ namespace Urbagestion.DataAccess
         public void SetAdded(object entity)
         {
             Entry(entity).State = EntityState.Added;
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            //Many to many join table
+            builder.Entity<UserGroup>().HasKey(k => new {k.UserId, k.GroupId});
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Urbagestion.UI.Web.Controllers
             return View();
         }
 
+       
         public IActionResult About()
         {
             ViewData["Message"] = Resource.HomeController_About;
@@ -18,12 +19,14 @@ namespace Urbagestion.UI.Web.Controllers
             return View();
         }
 
+       
         public IActionResult Contact()
         {
             ViewData["Message"] = Resource.HomeController_Contact;
 
             return View();
         }
+
 
         public IActionResult Error()
         {

@@ -5,14 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Migrations\20171230091847_Initial.cs" />
-    <Compile Include="Migrations\20171230091847_Initial.Designer.cs" />
+    <Compile Remove="_old\**" />
+    <EmbeddedResource Remove="_old\**" />
+    <None Remove="_old\**" />
   </ItemGroup>
 
   <ItemGroup>

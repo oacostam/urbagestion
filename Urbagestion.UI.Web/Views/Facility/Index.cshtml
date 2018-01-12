@@ -24,6 +24,7 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Result[0].CloseAt)
                 </th>
+                @if(User.HasClaim())
                 <th>
                     @Html.DisplayNameFor(model => model.Result[0].IsActive)
                 </th>

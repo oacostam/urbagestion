@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Urbagestion.Model.Bussines.Interfaces;
@@ -15,6 +16,7 @@ using Urbagestion.Util;
 
 namespace Urbagestion.UI.Web.Controllers
 {
+    [Authorize]
     public class FacilityController : Controller
     {
         private readonly IFacilityManagement facilityManagement;
@@ -23,9 +25,7 @@ namespace Urbagestion.UI.Web.Controllers
         {
             this.facilityManagement = facilityManagement;
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public ActionResult Index(RequestBase request)
         {
             try

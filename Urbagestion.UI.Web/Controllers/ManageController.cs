@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Urbagestion.Model.Models;
+using Urbagestion.UI.Web.Extensions;
 using Urbagestion.UI.Web.Models.ManageViewModels;
 using Urbagestion.UI.Web.Services;
 
@@ -19,24 +20,24 @@ namespace Urbagestion.UI.Web.Controllers
     public class ManageController : Controller
     {
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
-        private readonly IEmailSender _emailSender;
-        private readonly ILogger _logger;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UrlEncoder _urlEncoder;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender emailSender;
+        private readonly ILogger logger;
+        private readonly SignInManager<User> signInManager;
+        private readonly UrlEncoder urlEncoder;
+        private readonly UserManager<User> userManager;
 
         public ManageController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
             IEmailSender emailSender,
             ILogger<ManageController> logger,
             UrlEncoder urlEncoder)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _emailSender = emailSender;
-            _logger = logger;
-            _urlEncoder = urlEncoder;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.emailSender = emailSender;
+            this.logger = logger;
+            this.urlEncoder = urlEncoder;
         }
 
         [TempData] public string StatusMessage { get; set; }
@@ -44,9 +45,9 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             var model = new IndexViewModel
             {
@@ -66,14 +67,14 @@ namespace Urbagestion.UI.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             var email = user.Email;
             if (model.Email != email)
             {
-                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                var setEmailResult = await userManager.SetEmailAsync(user, model.Email);
                 if (!setEmailResult.Succeeded)
                     throw new ApplicationException(
                         $"Unexpected error occurred setting email for user with ID '{user.Id}'.");
@@ -82,7 +83,7 @@ namespace Urbagestion.UI.Web.Controllers
             var phoneNumber = user.PhoneNumber;
             if (model.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                var setPhoneResult = await userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                     throw new ApplicationException(
                         $"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
@@ -98,14 +99,14 @@ namespace Urbagestion.UI.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+            var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var callbackUrl = Url.EmailConfirmationLink(user.Id.ToString(), code, Request.Scheme);
             var email = user.Email;
-            await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+            await emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToAction(nameof(Index));
@@ -114,11 +115,11 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var hasPassword = await _userManager.HasPasswordAsync(user);
+            var hasPassword = await userManager.HasPasswordAsync(user);
             if (!hasPassword) return RedirectToAction(nameof(SetPassword));
 
             var model = new ChangePasswordViewModel {StatusMessage = StatusMessage};
@@ -131,20 +132,20 @@ namespace Urbagestion.UI.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             var changePasswordResult =
-                await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (!changePasswordResult.Succeeded)
             {
                 AddErrors(changePasswordResult);
                 return View(model);
             }
 
-            await _signInManager.SignInAsync(user, false);
-            _logger.LogInformation("User changed their password successfully.");
+            await signInManager.SignInAsync(user, false);
+            logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
 
             return RedirectToAction(nameof(ChangePassword));
@@ -153,11 +154,11 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> SetPassword()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var hasPassword = await _userManager.HasPasswordAsync(user);
+            var hasPassword = await userManager.HasPasswordAsync(user);
 
             if (hasPassword) return RedirectToAction(nameof(ChangePassword));
 
@@ -171,18 +172,18 @@ namespace Urbagestion.UI.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+            var addPasswordResult = await userManager.AddPasswordAsync(user, model.NewPassword);
             if (!addPasswordResult.Succeeded)
             {
                 AddErrors(addPasswordResult);
                 return View(model);
             }
 
-            await _signInManager.SignInAsync(user, false);
+            await signInManager.SignInAsync(user, false);
             StatusMessage = "Your password has been set.";
 
             return RedirectToAction(nameof(SetPassword));
@@ -191,15 +192,15 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ExternalLogins()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var model = new ExternalLoginsViewModel {CurrentLogins = await _userManager.GetLoginsAsync(user)};
-            model.OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+            var model = new ExternalLoginsViewModel {CurrentLogins = await userManager.GetLoginsAsync(user)};
+            model.OtherLogins = (await signInManager.GetExternalAuthenticationSchemesAsync())
                 .Where(auth => model.CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
                 .ToList();
-            model.ShowRemoveButton = await _userManager.HasPasswordAsync(user) || model.CurrentLogins.Count > 1;
+            model.ShowRemoveButton = await userManager.HasPasswordAsync(user) || model.CurrentLogins.Count > 1;
             model.StatusMessage = StatusMessage;
 
             return View(model);
@@ -215,24 +216,24 @@ namespace Urbagestion.UI.Web.Controllers
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action(nameof(LinkLoginCallback));
             var properties =
-                _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl,
-                    _userManager.GetUserId(User));
+                signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl,
+                    userManager.GetUserId(User));
             return new ChallengeResult(provider, properties);
         }
 
         [HttpGet]
         public async Task<IActionResult> LinkLoginCallback()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
+            var info = await signInManager.GetExternalLoginInfoAsync(user.Id.ToString());
             if (info == null)
                 throw new ApplicationException(
                     $"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
 
-            var result = await _userManager.AddLoginAsync(user, info);
+            var result = await userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
                 throw new ApplicationException(
                     $"Unexpected error occurred adding external login for user with ID '{user.Id}'.");
@@ -248,16 +249,16 @@ namespace Urbagestion.UI.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel model)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var result = await _userManager.RemoveLoginAsync(user, model.LoginProvider, model.ProviderKey);
+            var result = await userManager.RemoveLoginAsync(user, model.LoginProvider, model.ProviderKey);
             if (!result.Succeeded)
                 throw new ApplicationException(
                     $"Unexpected error occurred removing external login for user with ID '{user.Id}'.");
 
-            await _signInManager.SignInAsync(user, false);
+            await signInManager.SignInAsync(user, false);
             StatusMessage = "The external login was removed.";
             return RedirectToAction(nameof(ExternalLogins));
         }
@@ -265,15 +266,15 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> TwoFactorAuthentication()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             var model = new TwoFactorAuthenticationViewModel
             {
-                HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null,
+                HasAuthenticator = await userManager.GetAuthenticatorKeyAsync(user) != null,
                 Is2faEnabled = user.TwoFactorEnabled,
-                RecoveryCodesLeft = await _userManager.CountRecoveryCodesAsync(user)
+                RecoveryCodesLeft = await userManager.CountRecoveryCodesAsync(user)
             };
 
             return View(model);
@@ -282,9 +283,9 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Disable2FaWarning()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             if (!user.TwoFactorEnabled)
                 throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
@@ -296,30 +297,30 @@ namespace Urbagestion.UI.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Disable2Fa()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var disable2FaResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
+            var disable2FaResult = await userManager.SetTwoFactorEnabledAsync(user, false);
             if (!disable2FaResult.Succeeded)
                 throw new ApplicationException($"Unexpected error occured disabling 2FA for user with ID '{user.Id}'.");
 
-            _logger.LogInformation("User with ID {UserId} has disabled 2fa.", user.Id);
+            logger.LogInformation("User with ID {UserId} has disabled 2fa.", user.Id);
             return RedirectToAction(nameof(TwoFactorAuthentication));
         }
 
         [HttpGet]
         public async Task<IActionResult> EnableAuthenticator()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+            var unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
             {
-                await _userManager.ResetAuthenticatorKeyAsync(user);
-                unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
+                await userManager.ResetAuthenticatorKeyAsync(user);
+                unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
             }
 
             var model = new EnableAuthenticatorViewModel
@@ -337,15 +338,15 @@ namespace Urbagestion.UI.Web.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             // Strip spaces and hypens
             var verificationCode = model.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var is2FaTokenValid = await _userManager.VerifyTwoFactorTokenAsync(
-                user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+            var is2FaTokenValid = await userManager.VerifyTwoFactorTokenAsync(
+                user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
             if (!is2FaTokenValid)
             {
@@ -353,8 +354,8 @@ namespace Urbagestion.UI.Web.Controllers
                 return View(model);
             }
 
-            await _userManager.SetTwoFactorEnabledAsync(user, true);
-            _logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
+            await userManager.SetTwoFactorEnabledAsync(user, true);
+            logger.LogInformation("User with ID {UserId} has enabled 2FA with an authenticator app.", user.Id);
             return RedirectToAction(nameof(GenerateRecoveryCodes));
         }
 
@@ -368,13 +369,13 @@ namespace Urbagestion.UI.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetAuthenticator()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
-            await _userManager.SetTwoFactorEnabledAsync(user, false);
-            await _userManager.ResetAuthenticatorKeyAsync(user);
-            _logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
+            await userManager.SetTwoFactorEnabledAsync(user, false);
+            await userManager.ResetAuthenticatorKeyAsync(user);
+            logger.LogInformation("User with id '{UserId}' has reset their authentication app key.", user.Id);
 
             return RedirectToAction(nameof(EnableAuthenticator));
         }
@@ -382,18 +383,18 @@ namespace Urbagestion.UI.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GenerateRecoveryCodes()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                throw new ApplicationException($"Unable to load user with ID '{userManager.GetUserId(User)}'.");
 
             if (!user.TwoFactorEnabled)
                 throw new ApplicationException(
                     $"Cannot generate recovery codes for user with ID '{user.Id}' as they do not have 2FA enabled.");
 
-            var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+            var recoveryCodes = await userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
             var model = new GenerateRecoveryCodesViewModel {RecoveryCodes = recoveryCodes.ToArray()};
 
-            _logger.LogInformation("User with ID {UserId} has generated new 2FA recovery codes.", user.Id);
+            logger.LogInformation("User with ID {UserId} has generated new 2FA recovery codes.", user.Id);
 
             return View(model);
         }
@@ -424,8 +425,8 @@ namespace Urbagestion.UI.Web.Controllers
         {
             return string.Format(
                 AuthenicatorUriFormat,
-                _urlEncoder.Encode("Urbagestion.UI.Web"),
-                _urlEncoder.Encode(email),
+                urlEncoder.Encode("Urbagestion.UI.Web"),
+                urlEncoder.Encode(email),
                 unformattedKey);
         }
 

@@ -1,2 +1,2 @@
-Add-Migration -Name] "Initial" -Context "ApplicationDbContext" -Project "Urbagestion.DataAccess" -StartupProject "Urbagestion.UI.Web"
+Add-Migration -Name "Initial" -Context "ApplicationDbContext" -OutputDir "Migrations" -Project "Urbagestion.DataAccess" -StartupProject "Urbagestion.UI.Web"
 Update-Database -Migration "Initial" -Context "ApplicationDbContext" -Project "Urbagestion.DataAccess" -StartupProject "Urbagestion.UI.Web"

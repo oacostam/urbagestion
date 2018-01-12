@@ -6,7 +6,7 @@ namespace Urbagestion.Model.Models
     {
         public decimal Amount { get; set; } = 0;
 
-        public ApplicationUser User { get; set; }
+        public User User { get; set; }
         
     }
 }
