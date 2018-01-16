@@ -8,8 +8,6 @@ namespace Urbagestion.Model.Models
     [Table("Users")]
     public class User : IdentityUser<int>, IHasIdentity
     {
-        public string Addresss { get; set; }
-
         public bool IsCoordinator { get; set; } = false;
 
         public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
@@ -25,5 +23,11 @@ namespace Urbagestion.Model.Models
         public int? Floor { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        public string Name { get; set; }
+
+        public string MiddleName { get; set; }
+
+        public string SecondLastName { get; set; }
     }
 }

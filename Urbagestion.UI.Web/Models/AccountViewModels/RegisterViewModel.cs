@@ -4,12 +4,30 @@ namespace Urbagestion.UI.Web.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "El {0} es obligatorio")]
+        [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} y un máximo de {1} caractéres.", MinimumLength = 6)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Nombre")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "El {0} es obligatorio")]
+        [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} y un máximo de {1} caractéres.", MinimumLength = 6)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Primer Apellido")]
+        public string FirstLastName { get; set; }
+
+        [Required(ErrorMessage = "El {0} es obligatorio")]
+        [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} y un máximo de {1} caractéres.", MinimumLength = 6)]
+        [DataType(DataType.Text)]
+        [Display(Name = "Segundo Apellido")]
+        public string SecondLastName { get; set; }
+
+        [Required(ErrorMessage = "El {0} es obligatorio")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "La {0} es obligatorio")]
         [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} y un máximo de {1} caractéres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
@@ -20,7 +38,7 @@ namespace Urbagestion.UI.Web.Models.AccountViewModels
         [Compare("Password", ErrorMessage = "La contraseña y la confirmación no coinciden.")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "La {0} es obligatorio")]
         [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} y un máximo de {1} caractéres.", MinimumLength = 3)]
         [DataType(DataType.Text)]
         [Display(Name = "Calle")]

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Urbagestion.DataAccess;
+using Urbagestion.DataAccess.Extensions;
 using Urbagestion.Model.Bussines.Implementation;
 using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Interfaces;
@@ -18,20 +19,20 @@ namespace Urbagestion.UI.Web
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+        
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);
+            services.AddSingleton(configuration);
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, Role>(a => a.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -47,7 +48,7 @@ namespace Urbagestion.UI.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -70,7 +71,15 @@ namespace Urbagestion.UI.Web
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
-            await MasterData.InitializeFacilityeDatabaseAsync(app.ApplicationServices);
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (serviceScope.ServiceProvider.GetService<ApplicationDbContext>().AllMigrationsApplied()) return;
+                 serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                MasterData.SeedDefaultUsersAndRoles(serviceScope.ServiceProvider.GetService<UserManager<User>>(),
+                    serviceScope.ServiceProvider.GetService<RoleManager<Role>>());
+                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Seed();
+            }
         }
     }
 }

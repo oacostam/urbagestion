@@ -199,7 +199,18 @@ namespace Urbagestion.UI.Web.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User {UserName = model.Email, Email = model.Email};
+                var user = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Apartment = model.Apartment,
+                    Floor = model.Floor,
+                    SecondLastName = model.SecondLastName,
+                    MiddleName = model.FirstLastName,
+                    Street = model.Street,
+                    StreetNumber = model.StreetNumber
+                };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

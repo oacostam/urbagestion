@@ -17,10 +17,10 @@ namespace Urbagestion.UI.Web.Security
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(TUser user)
         {
             var id = await base.GenerateClaimsAsync(user);
-            if (!string.IsNullOrEmpty(user.Addresss))
-            {
-                id.AddClaim(new Claim(CustomClaims.Address, user.Addresss));
-            }
+            //if (!string.IsNullOrEmpty(user.Addresss))
+            //{
+            //    id.AddClaim(new Claim(CustomClaims.Address, user.Addresss));
+            //}
             return id;
         }
     }
