@@ -1,23 +1,17 @@
 ﻿using System.Data;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Urbagestion.Model.Models;
 
-namespace Urbagestion.UI.Web.Data
+namespace Urbagestion.DataAccess.Seeding
 {
-    public class MasterData
+    public static class MasterData
     {
         private static readonly string[] RoleNames = {"Admin", "Manager", "Member"};
 
-        public static void SeedDefaultUsersAndRoles(UserManager<User> userManager, RoleManager<Role> roleManager)
-        {
-            CreateRoles(roleManager);
-            CreateAdmin(userManager);
-        }
 
-        private static void CreateAdmin(UserManager<User> userManager)
+        public static void CreateDefaultAdmin(this UserManager<User> userManager)
         {
             var user = userManager.FindByNameAsync("AdminUrbagestion").Result;
             if (user == null)
@@ -29,13 +23,13 @@ namespace Urbagestion.UI.Web.Data
             }
         }
 
-        private static async Task CreateRoles(RoleManager<Role> roleManager)
+        public static void CreateDefaultRoles(this RoleManager<Role> roleManager)
         {
             foreach (var roleName in RoleNames)
             {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                var roleExist = roleManager.RoleExistsAsync(roleName).Result;
                 if (roleExist) continue;
-                var roleResult = await roleManager.CreateAsync(new Role(roleName));
+                var roleResult = roleManager.CreateAsync(new Role(roleName)).Result;
                 if (roleResult.Succeeded) continue;
                 var errors = new StringBuilder();
                 foreach (var error in roleResult.Errors)
