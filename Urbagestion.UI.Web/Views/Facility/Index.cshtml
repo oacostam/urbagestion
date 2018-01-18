@@ -1,4 +1,6 @@
-﻿@model PageResult<Urbagestion.UI.Web.Models.FacilityViewModels.FacilityIndexViewModel[]>
+﻿@using System.Security.Claims
+@using Urbagestion.DataAccess.Seeding
+@model PageResult<Urbagestion.UI.Web.Models.FacilityViewModels.FacilityIndexViewModel[]>
 
 @{
     ViewData["Title"] = "Index";
@@ -24,23 +26,25 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Result[0].CloseAt)
                 </th>
-                @if(User.HasClaim())
-                <th>
-                    @Html.DisplayNameFor(model => model.Result[0].IsActive)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Result[0].CreationdDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Result[0].CreatedBy)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Result[0].UpdatedDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Result[0].UpdatedBy)
-                </th>
-            <th></th>
+                @if (this.User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result[0].IsActive)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result[0].CreationdDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result[0].CreatedBy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result[0].UpdatedDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Result[0].UpdatedBy)
+                    </th>
+                }
+                
         </tr>
     </thead>
     <tbody>

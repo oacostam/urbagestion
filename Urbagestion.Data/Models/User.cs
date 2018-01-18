@@ -14,20 +14,12 @@ namespace Urbagestion.Model.Models
 
         public virtual ICollection<UserGroup> UserGroup { get; set; } = new HashSet<UserGroup>();
 
-        public string Street { get; set; }
-
-        public int? StreetNumber { get; set; }
-
-        public string Apartment { get; set; }
-
-        public int? Floor { get; set; }
+        public string Address { get; set; }
 
         public bool IsActive { get; set; } = true;
 
         public string Name { get; set; }
 
         public string MiddleName { get; set; }
-
-        public string SecondLastName { get; set; }
     }
 }

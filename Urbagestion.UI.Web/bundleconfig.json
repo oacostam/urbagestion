@@ -9,6 +9,55 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/js/moment.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/moment/min/moment.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/calendar_locale_es.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/locale/es.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/fullcalendar.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/fullcalendar.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/gcal.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/gcal.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/locale-all.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/locale-all.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/gcal.min.js",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/gcal.min.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/fullcalendar.min.css",
+    // An array of relative input file paths. Globbing patterns supported
+    "inputFiles": [
+      "bower_components/fullcalendar/dist/fullcalendar.min.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/site.js"

@@ -33,7 +33,11 @@ namespace Urbagestion.UI.Web
             services.AddSingleton(configuration);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<User, Role>(a => a.User.RequireUniqueEmail = true)
+            services.AddIdentity<User, Role>(a =>
+                {
+                    a.User.RequireUniqueEmail = true;
+                    a.Password.RequireNonAlphanumeric = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

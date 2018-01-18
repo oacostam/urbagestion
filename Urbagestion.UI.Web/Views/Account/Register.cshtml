@@ -7,39 +7,29 @@
 
 <div class="row">
     <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-        <h4>Crear una cuenta nueva.</h4>
+        <h4>Registro de usuario.</h4>
         <hr />
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="col-xs-6 form-group">
             <label asp-for="Name"></label>
-            <input asp-for="Name" class="form-control" />
+            <input asp-for="Name" class="form-control" autocomplete="given-name" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="col-xs-6 form-group">
             <label asp-for="FirstLastName"></label>
-            <input asp-for="FirstLastName" class="form-control" />
+            <input asp-for="FirstLastName" class="form-control" autocomplete="family-name" />
             <span asp-validation-for="FirstLastName" class="text-danger"></span>
         </div>
 
         <div class="col-xs-6 form-group">
             <label asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" />
+            <input asp-for="Email" class="form-control" autocomplete="email" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="col-xs-6 form-group">
-            <label asp-for="Street"></label>
-            <input asp-for="Street" class="form-control" />
-            <span asp-validation-for="Street" class="text-danger"></span>
-        </div>
-        <div class="col-xs-6 form-group">
-            <label asp-for="Floor"></label>
-            <input asp-for="Floor" class="form-control" />
-            <span asp-validation-for="Floor" class="text-danger"></span>
-        </div>
-        <div class="col-xs-6 form-group">
-            <label asp-for="Apartment"></label>
-            <input asp-for="Apartment" class="form-control" />
-            <span asp-validation-for="Apartment" class="text-danger"></span>
+            <label asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" autocomplete="street-address" />
+            <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="col-xs-6 form-group">
             <label asp-for="Password"></label>

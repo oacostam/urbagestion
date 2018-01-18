@@ -37,7 +37,7 @@ namespace Urbagestion.UI.Web.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                PageResult<IndexViewModel[]> result = new PageResult<IndexViewModel[]>() {ErrorMessage = e.Message};
+                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>() {ErrorMessage = e.Message};
                 return View(result);
             }
             

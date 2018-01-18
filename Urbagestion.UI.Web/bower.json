@@ -1,0 +1,21 @@
+{
+  "name": "urbagestion",
+  "homepage": "https://github.com/oacostam/urbagestion",
+  "authors": [
+    "oacostam <oscar.acostamontesde@googlemail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fullcalendar": "v3.8.0"
+  }
+}

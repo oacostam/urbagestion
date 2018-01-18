@@ -8,7 +8,11 @@ namespace Urbagestion.DataAccess.Seeding
 {
     public static class MasterData
     {
-        private static readonly string[] RoleNames = {"Admin", "Manager", "Member"};
+        public const string RoleAdmin = "Admin";
+        public const string RoleManager = "Manager";
+        public const string RoleUser = "User";
+
+        private static readonly string[] RoleNames = {RoleAdmin, RoleManager, RoleUser};
 
 
         public static void CreateDefaultAdmin(this UserManager<User> userManager)

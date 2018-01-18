@@ -194,7 +194,7 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Apartment");
+                    b.Property<string>("Address");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -203,8 +203,6 @@ namespace Urbagestion.DataAccess.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<int?>("Floor");
 
                     b.Property<bool>("IsActive");
 
@@ -230,13 +228,7 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("SecondLastName");
-
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<string>("Street");
-
-                    b.Property<int?>("StreetNumber");
 
                     b.Property<bool>("TwoFactorEnabled");
 
