@@ -20,10 +20,12 @@ namespace Urbagestion.UI.Web.Controllers
     public class FacilityController : Controller
     {
         private readonly IFacilityManagement facilityManagement;
+        private readonly IMapper mapper;
 
-        public FacilityController(IFacilityManagement facilityManagement)
+        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper)
         {
             this.facilityManagement = facilityManagement;
+            this.mapper = mapper;
         }
         
         public ActionResult Index(RequestBase request)
@@ -31,7 +33,7 @@ namespace Urbagestion.UI.Web.Controllers
             try
             {
                 var facilities = facilityManagement.GetAll(request.Page, request.Size, out var total, request.SortField, request.Order);
-                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>(){Result = Mapper.Map<Facility[], FacilityIndexViewModel[]>(facilities), Total = total};
+                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>(){Result = mapper.Map<Facility[], FacilityIndexViewModel[]>(facilities), Total = total};
                 return View(result);
             }
             catch (Exception e)
@@ -52,24 +54,30 @@ namespace Urbagestion.UI.Web.Controllers
         // GET: Facility/Create
         public ActionResult Create()
         {
-            return View();
+            FacilityIndexViewModel facilityModel = new FacilityIndexViewModel();
+            return View(facilityModel);
         }
 
         // POST: Facility/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(FacilityIndexViewModel facilityViewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                try
+                {
+                    Facility facility = Mapper.Map<FacilityIndexViewModel, Facility>(facilityViewModel);
+                    facilityManagement.Create(facility);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    return View();
+                }
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Create", facilityViewModel);
         }
 
         // GET: Facility/Edit/5

@@ -20,10 +20,10 @@ namespace Urbagestion.DataAccess.Seeding
             var user = userManager.FindByNameAsync("AdminUrbagestion").Result;
             if (user == null)
             {
-                user = new User {UserName = "Admin", Email = "admin@none.com"};
-                userManager.CreateAsync(user, "Admin123-").Wait();
+                user = new User {UserName = "admin@none.com", Email = "admin@none.com", Name = "Admin", IsActive = true};
+                userManager.CreateAsync(user, "Admin123").Wait();
                 userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin")).Wait();
-                userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed")).Wait();
+                userManager.AddToRoleAsync(user, RoleAdmin).Wait();
             }
         }
 
