@@ -8,8 +8,7 @@ namespace Urbagestion.UI.Web.Profiles
     {
         public DomainProfile()
         {
-            CreateMap<FacilityIndexViewModel, Facility>();
-            CreateMap<Facility, FacilityIndexViewModel>();
+            CreateMap<FacilityIndexViewModel, Facility>().ReverseMap();
         }
     }
 }

@@ -7,10 +7,10 @@
 }
 
 <h2>Index</h2>
-@if (this.User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
+@if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create">Crear nueva</a>
     </p>
 }
 <table class="table">
@@ -28,25 +28,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Result[0].CloseAt)
                 </th>
-                @if (this.User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
-                {
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result[0].IsActive)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result[0].CreationdDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result[0].CreatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result[0].UpdatedDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Result[0].UpdatedBy)
-                    </th>
-                }
-                
         </tr>
     </thead>
     <tbody>
@@ -67,25 +48,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
+    
             <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationdDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
+                {
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }) <text>|</text>
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }) <text>|</text>
+                }
+                @Html.ActionLink("Detalles", "Details", new { id = item.Id })
             </td>
         </tr>
 }

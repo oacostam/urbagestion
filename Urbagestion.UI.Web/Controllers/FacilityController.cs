@@ -48,7 +48,9 @@ namespace Urbagestion.UI.Web.Controllers
         // GET: Facility/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var facilities = facilityManagement.GetById(id);
+            FacilityIndexViewModel result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
+            return View(result);
         }
 
         // GET: Facility/Create
