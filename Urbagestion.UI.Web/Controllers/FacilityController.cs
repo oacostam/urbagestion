@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Urbagestion.Model.Bussines.Interfaces;
-using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
 using Urbagestion.UI.Web.Models;
 using Urbagestion.UI.Web.Models.FacilityViewModels;
-using Urbagestion.UI.Web.Models.ManageViewModels;
-using Urbagestion.Util;
 
 namespace Urbagestion.UI.Web.Controllers
 {
@@ -20,83 +15,88 @@ namespace Urbagestion.UI.Web.Controllers
     public class FacilityController : Controller
     {
         private readonly IFacilityManagement facilityManagement;
+        private readonly ILogger logger;
         private readonly IMapper mapper;
 
-        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper)
+        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper, ILogger<FacilityController> logger)
         {
             this.facilityManagement = facilityManagement;
             this.mapper = mapper;
+            this.logger = logger;
         }
-        
+
         public ActionResult Index(RequestBase request)
         {
             try
             {
-                var facilities = facilityManagement.GetAll(request.Page, request.Size, out var total, request.SortField, request.Order);
-                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>(){Result = mapper.Map<Facility[], FacilityIndexViewModel[]>(facilities), Total = total};
+                var facilities = facilityManagement.GetAll(request.Page, request.Size, out var total, request.SortField,
+                    request.Order);
+                var result = new PageResult<FacilityIndexViewModel[]>
+                {
+                    Result = mapper.Map<Facility[], FacilityIndexViewModel[]>(facilities),
+                    Total = total
+                };
                 return View(result);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                PageResult<FacilityIndexViewModel[]> result = new PageResult<FacilityIndexViewModel[]>() {ErrorMessage = e.Message};
-                return View(result);
+                logger.LogError(ex, null, null);
+                return StatusCode(500);
             }
-            
         }
 
         // GET: Facility/Details/5
         public ActionResult Details(int id)
         {
             var facilities = facilityManagement.GetById(id);
-            FacilityIndexViewModel result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
+            var result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
             return View(result);
         }
 
         // GET: Facility/Create
         public ActionResult Create()
         {
-            FacilityIndexViewModel facilityModel = new FacilityIndexViewModel();
+            var facilityModel = new FacilityIndexViewModel();
             return View(facilityModel);
         }
+        
 
-        // POST: Facility/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(FacilityIndexViewModel facilityViewModel)
         {
             if (ModelState.IsValid)
-            {
                 try
                 {
-                    Facility facility = Mapper.Map<FacilityIndexViewModel, Facility>(facilityViewModel);
+                    var facility = Mapper.Map<FacilityIndexViewModel, Facility>(facilityViewModel);
                     facilityManagement.Create(facility);
                     return RedirectToAction(nameof(Index));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    return View();
+                    logger.LogError(ex, null, null);
+                    return StatusCode(500);
                 }
-            }
 
             return RedirectToAction("Create", facilityViewModel);
         }
+        
 
-        // GET: Facility/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var facilities = facilityManagement.GetById(id);
+            var result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
+            return View(result);
         }
+        
 
-        // POST: Facility/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(FacilityIndexViewModel facilityViewModel)
         {
             try
             {
-                // TODO: Add update logic here
-
+                
                 return RedirectToAction(nameof(Index));
             }
             catch
