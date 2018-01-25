@@ -153,8 +153,8 @@
   <data name="_Layout_ToogleNavigation" xml:space="preserve">
     <value>Alternar navegación</value>
   </data>
-  <data name="ModelBase_CreatedByNotEmpty" xml:space="preserve">
-    <value>No se ha especificado al creador del registro.</value>
+  <data name="ModelBase_IdMinusCero" xml:space="preserve">
+    <value>Identificador inválido.</value>
   </data>
   <data name="ModelBase_CreatedByLabel" xml:space="preserve">
     <value>Creado por:</value>

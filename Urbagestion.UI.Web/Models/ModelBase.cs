@@ -15,29 +15,13 @@ namespace Urbagestion.UI.Web.Models
         [Display(ResourceType = typeof(Resource), Name = "ModelBase_IsActiveLabel")] 
         public bool IsActive { get; set; } = false;
 
-        [Required]
-        [Display(ResourceType = typeof(Resource), Name = "ModelBase_CreationdDateLabel")]
-        public DateTime CreationdDate { get; set; } = DateTime.Now;
-
-        [Required]
-        [Display(ResourceType = typeof(Resource), Name = "ModelBase_CreatedByLabel")]
-        public string CreatedBy { get; set; }
-
-        [Required]
-        [Display(ResourceType = typeof(Resource), Name = "ModelBase_UpdatedDateLabel")]
-        public DateTime UpdatedDate { get; set; }  = DateTime.Now;
-
-        [Required] public string UpdatedBy { get; set; }
+       
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (string.IsNullOrEmpty(CreatedBy))
+            if (Id < 0)
             {
-                yield return new ValidationResult(Resource.ModelBase_CreatedByNotEmpty);
-            }
-            if (string.IsNullOrEmpty(UpdatedBy))
-            {
-                yield return new ValidationResult(Resource.ModelBase_CreatedByNotEmpty);
+                yield return new ValidationResult(Resource.ModelBase_IdMinusCero);
             }
         }
     }

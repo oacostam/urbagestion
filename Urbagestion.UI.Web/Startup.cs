@@ -30,9 +30,14 @@ namespace Urbagestion.UI.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Order matters. 
+            // Adds config as singleton.
             services.AddSingleton(configuration);
+            // DbContext, needed by services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IUnitOfWork, ApplicationDbContext>();
+            // Setup seccurity.
             services.AddIdentity<User, Role>(a =>
                 {
                     a.User.RequireUniqueEmail = true;
@@ -40,11 +45,9 @@ namespace Urbagestion.UI.Web
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            // Add application services.
             services.AddTransient<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory<User>>();
+            // Add application services as transients.
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IUnitOfWork, ApplicationDbContext>();
             services.AddTransient<IFacilityManagement, FacilityManagement>();
             // Add automapper service.
             services.AddAutoMapper();

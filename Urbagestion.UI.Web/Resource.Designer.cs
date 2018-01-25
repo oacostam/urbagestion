@@ -124,20 +124,20 @@ namespace Urbagestion.UI.Web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No se ha especificado al creador del registro..
-        /// </summary>
-        public static string ModelBase_CreatedByNotEmpty {
-            get {
-                return ResourceManager.GetString("ModelBase_CreatedByNotEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Fecha de creación:.
         /// </summary>
         public static string ModelBase_CreationdDateLabel {
             get {
                 return ResourceManager.GetString("ModelBase_CreationdDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identificador inválido..
+        /// </summary>
+        public static string ModelBase_IdMinusCero {
+            get {
+                return ResourceManager.GetString("ModelBase_IdMinusCero", resourceCulture);
             }
         }
         
