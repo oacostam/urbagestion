@@ -49,6 +49,8 @@ namespace Urbagestion.DataAccess
             base.OnModelCreating(builder);
             //Many to many join table
             builder.Entity<UserGroup>().HasKey(k => new {k.UserId, k.GroupId});
+            // Unique indexes
+            builder.Entity<Facility>().HasIndex(f => f.Name).HasName($"UX_{nameof(Facility)}_{nameof(Facility.Name)}").IsUnique();
         }
     }
 }

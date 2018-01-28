@@ -13,6 +13,8 @@ namespace Urbagestion.Model.Bussines.Common
         protected readonly IPrincipal Principal;
         protected readonly IUnitOfWork UnitOfWork;
 
+        
+
         protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal)
         {
             if (!principal.Identity.IsAuthenticated) throw new UnauthorizedAccessException();
@@ -45,15 +47,27 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual void Delete(T entity, bool logicalDelete = true)
         {
-            UnitOfWork.GetDbSet<T>().Attach(entity);
-            if (logicalDelete)
+            try
             {
-                entity.IsActive = false;
-                SetAuditFields(entity, true, Principal);
+                UnitOfWork.GetDbSet<T>().Attach(entity);
+                if (logicalDelete)
+                {
+                    entity.IsActive = false;
+                    SetAuditFields(entity, true, Principal);
+                }
+                else
+                {
+                    if (Principal.IsInRole(Role.AdminRoleName)) 
+                        UnitOfWork.SetDeleted(entity);
+                    else
+                    {
+                        throw new UnauthorizedAccessException("El usuario no está autorizado a realizar el borrado solicitado.");
+                    }
+                }
             }
-            else
+            catch (Exception e)
             {
-                if (Principal.IsInRole(Role.AdminRoleName)) UnitOfWork.SetDeleted(entity);
+                throw new BussinesException("Ocurrió un error durante el borrado.", e);
             }
         }
 
@@ -72,15 +86,22 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual T Update(T entity)
         {
-            UnitOfWork.GetDbSet<T>().Attach(entity);
-            SetAuditFields(entity, false, Principal);
-            UnitOfWork.SetModified(entity);
-            return entity;
+            try
+            {
+                UnitOfWork.GetDbSet<T>().Attach(entity);
+                SetAuditFields(entity, false, Principal);
+                UnitOfWork.SetModified(entity);
+                return entity;
+            }
+            catch (Exception e)
+            {
+                throw new BussinesException("Ocurrió un error durante la actualización.", e);
+            }
         }
 
         public virtual T GetById(int id)
         {
-            return UnitOfWork.GetDbSet<T>().First(u => u.Id == id);
+            return UnitOfWork.GetDbSet<T>().FirstOrDefault(u => u.Id == id);
         }
 
         public virtual void Dispose(bool disposing)
@@ -90,7 +111,14 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual void Complete()
         {
-            UnitOfWork.Complete();
+            try
+            {
+                UnitOfWork.Complete();
+            }
+            catch (Exception e)
+            {
+                throw new BussinesException("Ocurrió un error confirmando la transacción.", e);
+            }
         }
     }
 }
