@@ -1,4 +1,6 @@
-﻿using Urbagestion.Model.Models;
+﻿using System;
+using System.Linq.Expressions;
+using Urbagestion.Model.Models;
 using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Interfaces
@@ -7,7 +9,7 @@ namespace Urbagestion.Model.Bussines.Interfaces
     {
         void Dispose();
         Facility Create(Facility entity);
-        void Delete(Facility entity, bool logicalDelete = true);
+        void Delete(Expression<Func<Facility, bool>> where, bool logicalDelete = true);
         Facility[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder);
         Facility Update(Facility entity);
         Facility GetById(int id);

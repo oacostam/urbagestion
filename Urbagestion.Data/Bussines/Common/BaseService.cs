@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Principal;
+using System.Threading;
 using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
-using Urbagestion.Model.Models;
 using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Common
@@ -13,10 +14,10 @@ namespace Urbagestion.Model.Bussines.Common
         protected readonly IPrincipal Principal;
         protected readonly IUnitOfWork UnitOfWork;
 
-        
 
-        protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal)
+        protected BaseService(IUnitOfWork unitOfWork)
         {
+            var principal = Thread.CurrentPrincipal;
             if (!principal.Identity.IsAuthenticated) throw new UnauthorizedAccessException();
             UnitOfWork = unitOfWork;
             Principal = principal;
@@ -45,25 +46,21 @@ namespace Urbagestion.Model.Bussines.Common
             if (isBeenCreated) entity.CreationdDate = DateTime.Now;
         }
 
-        public virtual void Delete(T entity, bool logicalDelete = true)
+        public virtual void Delete(Expression<Func<T, bool>> where, bool logicalDelete = true)
         {
             try
             {
-                UnitOfWork.GetDbSet<T>().Attach(entity);
-                if (logicalDelete)
-                {
-                    entity.IsActive = false;
-                    SetAuditFields(entity, true, Principal);
-                }
-                else
-                {
-                    if (Principal.IsInRole(Role.AdminRoleName)) 
-                        UnitOfWork.SetDeleted(entity);
+                var entities = UnitOfWork.GetDbSet<T>().Where(where);
+                foreach (var entity in entities)
+                    if (logicalDelete)
+                    {
+                        entity.IsActive = false;
+                        SetAuditFields(entity, true, Principal);
+                    }
                     else
                     {
-                        throw new UnauthorizedAccessException("El usuario no está autorizado a realizar el borrado solicitado.");
+                        UnitOfWork.SetDeleted(entity);
                     }
-                }
             }
             catch (Exception e)
             {

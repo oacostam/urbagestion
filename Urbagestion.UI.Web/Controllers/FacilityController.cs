@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -68,14 +69,14 @@ namespace Urbagestion.UI.Web.Controllers
             if (ModelState.IsValid)
                 try
                 {
-                    var facility = Mapper.Map<FacilityIndexViewModel, Facility>(facilityViewModel);
+                    var facility = mapper.Map<FacilityIndexViewModel, Facility>(facilityViewModel);
                     facilityManagement.Create(facility);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, null, null);
-                    return StatusCode(500);
+                    return View();
                 }
 
             return RedirectToAction("Create", facilityViewModel);
@@ -96,7 +97,7 @@ namespace Urbagestion.UI.Web.Controllers
         {
             try
             {
-                
+                throw new NotImplementedException();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -112,13 +113,18 @@ namespace Urbagestion.UI.Web.Controllers
         }
 
         // POST: Facility/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(RequestBase request)
         {
             try
             {
-                // TODO: Add delete logic here
+                if (request.Id == null)
+                {
+                    return StatusCode((int) HttpStatusCode.BadRequest);
+                }
+                facilityManagement.Delete(f => f.Id == request.Id);
 
                 return RedirectToAction(nameof(Index));
             }

@@ -14,5 +14,7 @@ namespace Urbagestion.UI.Web.Models
         public SortOrder Order { get; set; } = SortOrder.Desc;
 
         public string SortField { get; set; } = string.Empty;
+
+        public int? Id { get; set; }
     }
 }
