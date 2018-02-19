@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Urbagestion.Model.Common;
 
 namespace Urbagestion.Model.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        EntityEntry<T> EntityEntry<T>(T entity) where T : Entity;
-
         int Complete();
 
-        DbSet<T> GetDbSet<T>() where T : Entity;
+        IQueryable<T> GetEntitySet<T>() where T : class, IHasIdentity;
 
-        void SetModified(object entity);
+        T Update<T>(T entity) where T : class, IHasIdentity;
 
-        void SetDeleted(object entity);
+        void Delete<T>(T entity) where T : class, IHasIdentity;
 
-        void SetAdded(object entity);
+        T Add<T>(T entity) where T : class, IHasIdentity;
     }
 }

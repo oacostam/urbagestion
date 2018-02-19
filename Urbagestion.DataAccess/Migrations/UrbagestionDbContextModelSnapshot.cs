@@ -10,8 +10,8 @@ using Urbagestion.DataAccess;
 
 namespace Urbagestion.DataAccess.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(UrbagestionDbContext))]
+    partial class UrbagestionDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,10 @@ namespace Urbagestion.DataAccess.Migrations
                     b.Property<DateTime>("UpdatedDate");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasName("UX_Facility_Name");
 
                     b.ToTable("Facility");
                 });
@@ -194,7 +198,8 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .IsRequired();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -212,9 +217,11 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -334,7 +341,7 @@ namespace Urbagestion.DataAccess.Migrations
             modelBuilder.Entity("Urbagestion.Model.Models.Reservation", b =>
                 {
                     b.HasOne("Urbagestion.Model.Models.Facility", "Facility")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("FacilityId")
                         .OnDelete(DeleteBehavior.Cascade);
 

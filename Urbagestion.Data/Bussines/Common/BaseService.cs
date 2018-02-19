@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Threading;
 using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
+using Urbagestion.Model.Models;
 using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Common
 {
-    public abstract class BaseService<T> : IDisposable where T : Entity
+    public abstract class BaseService<T> : IDisposable where T : class, IHasIdentity
     {
-        protected readonly IPrincipal Principal;
-        protected readonly IUnitOfWork UnitOfWork;
+        private readonly IPrincipal principal;
+        private readonly IUnitOfWork unitOfWork;
 
+        protected IUnitOfWork UnitOfWork => unitOfWork;
 
-        protected BaseService(IUnitOfWork unitOfWork)
+        protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal)
         {
-            var principal = Thread.CurrentPrincipal;
+            this.principal = principal;
             if (!principal.Identity.IsAuthenticated) throw new UnauthorizedAccessException();
-            UnitOfWork = unitOfWork;
-            Principal = principal;
+            this.unitOfWork = unitOfWork;
         }
 
         public void Dispose()
@@ -28,39 +28,34 @@ namespace Urbagestion.Model.Bussines.Common
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        
 
-        public virtual T Create(T entity)
+        protected virtual T Create(T entity)
         {
-            if (entity == null) throw new ApplicationException();
-            SetAuditFields(entity, true, Principal);
-            UnitOfWork.GetDbSet<T>().Add(entity);
-            UnitOfWork.SetAdded(entity);
+            
+            SetAuditFields(entity, true);
+            unitOfWork.Add(entity);
             return entity;
         }
 
 
-        private static void SetAuditFields(Entity entity, bool isBeenCreated, IPrincipal principal)
+        private void SetAuditFields(object entity, bool isBeenCreated)
         {
-            entity.UpdatedDate = DateTime.Now;
-            entity.CreatedBy = principal.Identity.Name;
-            if (isBeenCreated) entity.CreationdDate = DateTime.Now;
+            if (entity is IAuditableEntity auditable)
+            {
+                auditable.UpdatedDate = DateTime.Now;
+                auditable.CreatedBy = principal.Identity.Name;
+                if (isBeenCreated) 
+                    auditable.CreationdDate = DateTime.Now;
+            }
+            
         }
 
-        public virtual void Delete(Expression<Func<T, bool>> where, bool logicalDelete = true)
+        protected virtual void Delete(T entity)
         {
             try
             {
-                var entities = UnitOfWork.GetDbSet<T>().Where(where);
-                foreach (var entity in entities)
-                    if (logicalDelete)
-                    {
-                        entity.IsActive = false;
-                        SetAuditFields(entity, true, Principal);
-                    }
-                    else
-                    {
-                        UnitOfWork.SetDeleted(entity);
-                    }
+                unitOfWork.Delete(entity);
             }
             catch (Exception e)
             {
@@ -70,9 +65,10 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual T[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder)
         {
-            total = UnitOfWork.GetDbSet<T>().Count();
+            total = unitOfWork.GetEntitySet<T>().Count();
             var skipRows = (page - 1) * size;
-            var query = (IQueryable<T>) UnitOfWork.GetDbSet<T>();
+            var query = unitOfWork.GetEntitySet<T>();
+            query = query.Where(e => e.IsActive);
             var propertyInfo = typeof(T).GetProperty(orderBy);
             if (propertyInfo != null)
                 query = sortOrder == SortOrder.Asc
@@ -81,13 +77,13 @@ namespace Urbagestion.Model.Bussines.Common
             return query.Skip(skipRows).Take(size).ToArray();
         }
 
-        public virtual T Update(T entity)
+        protected virtual T Update(T entity)
         {
+            
             try
             {
-                UnitOfWork.GetDbSet<T>().Attach(entity);
-                SetAuditFields(entity, false, Principal);
-                UnitOfWork.SetModified(entity);
+                SetAuditFields(entity, false);
+                unitOfWork.Update(entity);
                 return entity;
             }
             catch (Exception e)
@@ -98,24 +94,33 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual T GetById(int id)
         {
-            return UnitOfWork.GetDbSet<T>().FirstOrDefault(u => u.Id == id);
+            return unitOfWork.GetEntitySet<T>().FirstOrDefault(u => u.Id == id);
         }
 
         public virtual void Dispose(bool disposing)
         {
-            if (disposing) UnitOfWork?.Dispose();
+            if (disposing) unitOfWork?.Dispose();
         }
 
-        public virtual void Complete()
+        protected virtual void Complete()
         {
             try
             {
-                UnitOfWork.Complete();
+                unitOfWork.Complete();
             }
             catch (Exception e)
             {
                 throw new BussinesException("Ocurrió un error confirmando la transacción.", e);
             }
+        }
+
+
+        protected static void CheckNotNullAndAdminRigths(T entity)
+        {
+            if (entity == null) 
+                throw new BussinesException("No se puede actualizar una entidad nula");
+            if(!Thread.CurrentPrincipal.IsInRole(Role.AdminRoleName))
+                throw new BussinesException("El usuario no tiene autorización para realizar la accion solicitada.");
         }
     }
 }

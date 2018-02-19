@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Security.Principal;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,20 +32,25 @@ namespace Urbagestion.UI.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Security services
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IPrincipal>(
+                provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+
             // Order matters. 
             // Adds config as singleton.
             services.AddSingleton(configuration);
             // DbContext, needed by services.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<UrbagestionDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            services.AddTransient<IUnitOfWork, ApplicationDbContext>();
+            services.AddTransient<IUnitOfWork, UrbagestionDbContext>();
             // Setup seccurity.
             services.AddIdentity<User, Role>(a =>
                 {
                     a.User.RequireUniqueEmail = true;
                     a.Password.RequireNonAlphanumeric = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<UrbagestionDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory<User>>();
             // Add application services as transients.
@@ -81,11 +88,11 @@ namespace Urbagestion.UI.Web
             // Migrate and seed db
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                if (serviceScope.ServiceProvider.GetService<ApplicationDbContext>().AllMigrationsApplied()) return;
-                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                if (serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().AllMigrationsApplied()) return;
+                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Database.Migrate();
                 serviceScope.ServiceProvider.GetService<RoleManager<Role>>().CreateDefaultRoles();
                 serviceScope.ServiceProvider.GetService<UserManager<User>>().CreateDefaultAdmin();
-                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Seed();
+                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Seed();
             }
         }
     }

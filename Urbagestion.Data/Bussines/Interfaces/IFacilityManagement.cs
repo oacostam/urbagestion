@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Urbagestion.Model.Models;
 using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Interfaces
 {
-    public interface IFacilityManagement
+    public interface IFacilityManagement : IDisposable
     {
-        void Dispose();
         Facility Create(Facility entity);
-        void Delete(Expression<Func<Facility, bool>> where, bool logicalDelete = true);
+        void Delete(int id);
+        Facility Update(Facility facility);
         Facility[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder);
-        Facility Update(Facility entity);
         Facility GetById(int id);
-        void Dispose(bool disposing);
-        void Complete();
     }
 }

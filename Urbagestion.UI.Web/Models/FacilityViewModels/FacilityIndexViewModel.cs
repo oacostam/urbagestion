@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Urbagestion.UI.Web.Models.FacilityViewModels
@@ -18,10 +17,10 @@ namespace Urbagestion.UI.Web.Models.FacilityViewModels
         public decimal? Price { get; set; }
 
         [Display(Name = "Apertura")]
-        [Required] public TimeSpan OpensAt { get; set; } = new TimeSpan(9, 0, 0);
+        [Required] public TimeSpan? OpensAt { get; set; } = new TimeSpan(9, 0, 0);
 
         [Display(Name = "Cierre")]
-        [Required] public TimeSpan CloseAt { get; set; } = new TimeSpan(22, 0, 0);
+        [Required] public TimeSpan? CloseAt { get; set; } = new TimeSpan(22, 0, 0);
 
 
         public new IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -32,10 +31,12 @@ namespace Urbagestion.UI.Web.Models.FacilityViewModels
             }
             if (string.IsNullOrEmpty(Name))
                 yield return new ValidationResult(Resource.SharedResources_Name_NotNull);
-            if (OpensAt == TimeSpan.Zero)
+            if (!OpensAt.HasValue)
                 yield return new ValidationResult(Resource.SharedResource_OpensAt_NotNull);
-            if (CloseAt == TimeSpan.Zero)
-                yield return new ValidationResult(Resource.SharedResource_OpensAt_NotNull);
+            if (!CloseAt.HasValue)
+                yield return new ValidationResult(Resource.SharedResource_CloseAt_NotNull);
+            if((OpensAt.HasValue && CloseAt.HasValue) && OpensAt.Value >= CloseAt.Value)
+                yield return new ValidationResult(Resource.SharedResource_OpensAt_NotGreather_CloseAt);
         }
     }
 }

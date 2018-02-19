@@ -13,7 +13,7 @@ namespace Urbagestion.UI.Web.Models
 
         [Required]
         [Display(ResourceType = typeof(Resource), Name = "ModelBase_IsActiveLabel")] 
-        public bool IsActive { get; set; } = false;
+        public bool IsActive { get; set; } = true;
 
        
 

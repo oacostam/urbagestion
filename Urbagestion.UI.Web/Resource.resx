@@ -163,9 +163,15 @@
     <value>Fecha de creación:</value>
   </data>
   <data name="ModelBase_IsActiveLabel" xml:space="preserve">
-    <value>Borrado:</value>
+    <value>Activo:</value>
   </data>
   <data name="ModelBase_UpdatedDateLabel" xml:space="preserve">
     <value>Actualizado por:</value>
+  </data>
+  <data name="SharedResource_CloseAt_NotNull" xml:space="preserve">
+    <value>Debe especificar una hora de cierre.</value>
+  </data>
+  <data name="SharedResource_OpensAt_NotGreather_CloseAt" xml:space="preserve">
+    <value>La hora de apertura no puede ser igual o anterior a la de cierre.</value>
   </data>
 </root>

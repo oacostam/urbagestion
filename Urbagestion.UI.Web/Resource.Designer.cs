@@ -142,7 +142,7 @@ namespace Urbagestion.UI.Web {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Borrado:.
+        ///   Looks up a localized string similar to Activo:.
         /// </summary>
         public static string ModelBase_IsActiveLabel {
             get {
@@ -192,6 +192,24 @@ namespace Urbagestion.UI.Web {
         public static string Reservation_User_NotNull {
             get {
                 return ResourceManager.GetString("Reservation_User_NotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debe especificar una hora de cierre..
+        /// </summary>
+        public static string SharedResource_CloseAt_NotNull {
+            get {
+                return ResourceManager.GetString("SharedResource_CloseAt_NotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to La hora de apertura no puede ser igual o anterior a la de cierre..
+        /// </summary>
+        public static string SharedResource_OpensAt_NotGreather_CloseAt {
+            get {
+                return ResourceManager.GetString("SharedResource_OpensAt_NotGreather_CloseAt", resourceCulture);
             }
         }
         

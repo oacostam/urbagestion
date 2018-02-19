@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Util", "Urbages
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.UI.Web.Test", "Urbagestion.UI.Web.Test\Urbagestion.UI.Web.Test.csproj", "{7288A0CF-B900-42A3-BDC2-C9056D0D99E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urbagestion.Model.Test", "Urbagestion.Model.Test\Urbagestion.Model.Test.csproj", "{11E5A5E5-00BD-4A46-9404-396934680B3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{7288A0CF-B900-42A3-BDC2-C9056D0D99E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7288A0CF-B900-42A3-BDC2-C9056D0D99E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7288A0CF-B900-42A3-BDC2-C9056D0D99E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

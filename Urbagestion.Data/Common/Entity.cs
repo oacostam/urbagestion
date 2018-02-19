@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Urbagestion.Model.Interfaces;
 
 namespace Urbagestion.Model.Common
@@ -25,7 +26,7 @@ namespace Urbagestion.Model.Common
 
         [Required] public string UpdatedBy { get; set; }
 
-        [Key] public int Id { get; set; }
+        [Key, Column(Order = 0)][DatabaseGenerated(DatabaseGeneratedOption.Identity)] public int Id { get; set; }
 
         [Required] public bool IsActive { get; set; } = true;
     }

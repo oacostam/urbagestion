@@ -9,7 +9,7 @@ namespace Urbagestion.DataAccess.Extensions
 {
     public static class DbContextExtension
     {
-        public static bool AllMigrationsApplied(this ApplicationDbContext context)
+        public static bool AllMigrationsApplied(this UrbagestionDbContext context)
         {
             var applied = context.GetService<IHistoryRepository>()
                 .GetAppliedMigrations()
@@ -23,7 +23,7 @@ namespace Urbagestion.DataAccess.Extensions
         }
 
 
-        public static void Seed(this ApplicationDbContext context)
+        public static void Seed(this UrbagestionDbContext context)
         {
             // Insert master data
         }

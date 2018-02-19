@@ -98,7 +98,7 @@ namespace Urbagestion.UI.Web.Controllers
             try
             {
                 throw new NotImplementedException();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
@@ -120,17 +120,17 @@ namespace Urbagestion.UI.Web.Controllers
         {
             try
             {
-                if (request.Id == null)
+                if (!request.Id.HasValue)
                 {
                     return StatusCode((int) HttpStatusCode.BadRequest);
                 }
-                facilityManagement.Delete(f => f.Id == request.Id);
+                facilityManagement.Delete(request.Id.Value);
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View("Error");
             }
         }
     }
