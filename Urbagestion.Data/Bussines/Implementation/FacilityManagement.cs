@@ -16,7 +16,7 @@ namespace Urbagestion.Model.Bussines.Implementation
 
         public new Facility Create(Facility entity)
         {
-            CheckNotNullAndAdminRigths(entity);
+            CheckNotNullAndAdminRigths(entity, Principal);
             var otherWithSameName = UnitOfWork.GetEntitySet<Facility>().FirstOrDefault(f => f.Name == entity.Name);
             if (otherWithSameName != null)
                 throw new BussinesException(
@@ -29,7 +29,7 @@ namespace Urbagestion.Model.Bussines.Implementation
         public void Delete(int id)
         {
             var facility = GetById(id);
-            CheckNotNullAndAdminRigths(facility);
+            CheckNotNullAndAdminRigths(facility, Principal);
             if (UnitOfWork.GetEntitySet<Reservation>().Any(r => r.Facility.Id == facility.Id))
             {
                 facility.IsActive = false;
@@ -45,7 +45,7 @@ namespace Urbagestion.Model.Bussines.Implementation
 
         public new Facility Update(Facility facility)
         {
-            CheckNotNullAndAdminRigths(facility);
+            CheckNotNullAndAdminRigths(facility, Principal);
             facility = base.Update(facility);
             Complete();
             return facility;

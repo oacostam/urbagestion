@@ -16,6 +16,8 @@ namespace Urbagestion.Model.Bussines.Common
 
         protected IUnitOfWork UnitOfWork => unitOfWork;
 
+        protected IPrincipal Principal => principal;
+
         protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal)
         {
             this.principal = principal;
@@ -44,9 +46,11 @@ namespace Urbagestion.Model.Bussines.Common
             if (entity is IAuditableEntity auditable)
             {
                 auditable.UpdatedDate = DateTime.Now;
+                auditable.UpdatedBy = principal.Identity.Name;
+                if (!isBeenCreated) return;
                 auditable.CreatedBy = principal.Identity.Name;
-                if (isBeenCreated) 
-                    auditable.CreationdDate = DateTime.Now;
+                auditable.CreationdDate = DateTime.Now;
+
             }
             
         }
@@ -115,11 +119,11 @@ namespace Urbagestion.Model.Bussines.Common
         }
 
 
-        protected static void CheckNotNullAndAdminRigths(T entity)
+        protected static void CheckNotNullAndAdminRigths(T entity, IPrincipal principal)
         {
             if (entity == null) 
                 throw new BussinesException("No se puede actualizar una entidad nula");
-            if(!Thread.CurrentPrincipal.IsInRole(Role.AdminRoleName))
+            if(!principal.IsInRole(Role.AdminRoleName))
                 throw new BussinesException("El usuario no tiene autorización para realizar la accion solicitada.");
         }
     }
