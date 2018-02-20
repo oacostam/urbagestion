@@ -58,7 +58,8 @@ namespace Urbagestion.UI.Web
             services.AddTransient<IFacilityManagement, FacilityManagement>();
             // Add automapper service.
             services.AddAutoMapper();
-            services.AddMvc();
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,23 +78,30 @@ namespace Urbagestion.UI.Web
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
+            if(env.IsProduction())
+                app.UseResponseCompression();
 
+            app.UseSession();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+
             // Migrate and seed db
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                if (serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().AllMigrationsApplied()) return;
-                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Database.Migrate();
-                serviceScope.ServiceProvider.GetService<RoleManager<Role>>().CreateDefaultRoles();
-                serviceScope.ServiceProvider.GetService<UserManager<User>>().CreateDefaultAdmin();
-                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Seed();
-            }
+            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            //{
+            //    if (serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().AllMigrationsApplied()) return;
+            //    serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Database.Migrate();
+            //    serviceScope.ServiceProvider.GetService<RoleManager<Role>>().CreateDefaultRoles();
+            //    serviceScope.ServiceProvider.GetService<UserManager<User>>().CreateDefaultAdmin();
+            //    serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Seed();
+            //}
         }
     }
 }

@@ -98,7 +98,12 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual T GetById(int id)
         {
-            return unitOfWork.GetEntitySet<T>().FirstOrDefault(u => u.Id == id);
+            var result = unitOfWork.GetEntitySet<T>().FirstOrDefault(u => u.Id == id);
+            if(result == null)
+            {
+                throw new BussinesException("No se encontró el elemento solicitado.");
+            }
+            return result;
         }
 
         public virtual void Dispose(bool disposing)

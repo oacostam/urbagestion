@@ -95,10 +95,15 @@ namespace Urbagestion.UI.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(FacilityIndexViewModel facilityViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(facilityViewModel);
+            }
             try
             {
-                throw new NotImplementedException();
-                //return RedirectToAction(nameof(Index));
+                Facility facility = mapper.Map<Facility>(facilityViewModel);
+                facilityManagement.Update(facility);
+                return RedirectToAction(nameof(Index));
             }
             catch
             {

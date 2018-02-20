@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using AutoMapper;
@@ -31,14 +32,19 @@ namespace Urbagestion.UI.Web.Test
             });
             mapper = new Mock<IMapper>();
             mapper.Setup(s => s.Map<FacilityIndexViewModel, Facility>(It.IsAny<FacilityIndexViewModel>())).Returns(
-                (FacilityIndexViewModel m) => new Facility
+                (FacilityIndexViewModel m) =>
                 {
-                    CloseAt = m.CloseAt,
-                    Id = m.Id,
-                    Price = m.Price,
-                    Name = m.Name,
-                    OpensAt = m.OpensAt,
-                    IsActive = m.IsActive
+                    Debug.Assert(m.CloseAt != null, "m.CloseAt != null");
+                    Debug.Assert(m.OpensAt != null, "m.OpensAt != null");
+                    return new Facility
+                    {
+                        CloseAt = m.CloseAt.Value,
+                        Id = m.Id,
+                        Price = m.Price,
+                        Name = m.Name,
+                        OpensAt = m.OpensAt.Value,
+                        IsActive = m.IsActive
+                    };
                 });
         }
 
