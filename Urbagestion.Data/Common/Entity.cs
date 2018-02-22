@@ -12,16 +12,37 @@ namespace Urbagestion.Model.Common
     {
         private string createdBy;
         private string updatedBy;
+        private DateTime updatedDate;
+        private DateTime creationdDate;
 
         protected Entity()
         {
-            CreationdDate = DateTime.MinValue;
-            UpdatedDate = DateTime.MinValue;
-            Id = -1;
+            creationdDate = DateTime.MinValue;
+            updatedDate = DateTime.MinValue;
         }
 
+        [Key, Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
+        public int Id { get; set; }
 
-        [Required] public DateTime CreationdDate { get; set; }
+        [Required] 
+        public bool IsActive { get; set; } = true;
+
+        [Timestamp]
+        [ConcurrencyCheck]
+        public byte[] RowVersion { get; set; }
+
+        [Required]
+        public DateTime CreationdDate
+        {
+            get => creationdDate;
+            set
+            {
+                if(value == DateTime.MinValue)
+                    throw new BussinesException($"{value} no es un valor válido para {nameof(CreationdDate)}.");
+                creationdDate = value;
+            }
+        }
 
         [Required]
         public string CreatedBy
@@ -35,7 +56,18 @@ namespace Urbagestion.Model.Common
             }
         }
 
-        [Required] public DateTime UpdatedDate { get; set; }
+        [Required]
+        [ConcurrencyCheck]
+        public DateTime UpdatedDate
+        {
+            get => updatedDate;
+            set
+            {
+                if(value == DateTime.MinValue)
+                    throw new BussinesException($"{value} no es un valor válido para {nameof(UpdatedDate)}.");
+                updatedDate = value;
+            }
+        }
 
         [Required]
         public string UpdatedBy
@@ -48,9 +80,5 @@ namespace Urbagestion.Model.Common
                 updatedBy = value;
             }
         }
-
-        [Key, Column(Order = 0)][DatabaseGenerated(DatabaseGeneratedOption.Identity)] public int Id { get; set; }
-
-        [Required] public bool IsActive { get; set; } = true;
     }
 }

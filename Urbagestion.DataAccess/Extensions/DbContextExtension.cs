@@ -1,9 +1,6 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Urbagestion.Model.Models;
 
 namespace Urbagestion.DataAccess.Extensions
 {

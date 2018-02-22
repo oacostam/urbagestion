@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
+using AutoMapper;
 using Moq;
 using Urbagestion.Model.Bussines.Implementation;
 using Urbagestion.Model.Common;
@@ -14,8 +15,15 @@ namespace Urbagestion.Model.Test
 {
     public class FacilityManagementUnitTest
     {
+
+        public FacilityManagementUnitTest(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
+
         private readonly List<Facility> facilities = new List<Facility>();
         private readonly List<Reservation> reservations = new List<Reservation>();
+        private readonly IMapper mapper;
 
         private static IPrincipal GetAdminPrincipal()
         {
@@ -49,7 +57,7 @@ namespace Urbagestion.Model.Test
         {
             using (var dbContext = GetContext())
             {
-                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal()))
+                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal(), mapper))
                 {
                     facilityManagement.Create(new Facility {Name = "Test"});
                     Assert.Throws<BussinesException>(() => facilityManagement.Create(new Facility {Name = "Test"}));
@@ -62,7 +70,7 @@ namespace Urbagestion.Model.Test
         {
             using (var ctx = GetContext())
             {
-                using (var facilityManagement = new FacilityManagement(ctx, GetAdminPrincipal()))
+                using (var facilityManagement = new FacilityManagement(ctx, GetAdminPrincipal(), mapper))
                 {
                     var facility = new Facility {Name = "Test"};
                     facilityManagement.Create(facility);
@@ -78,7 +86,7 @@ namespace Urbagestion.Model.Test
             {
                 var facility = new Facility {Name = "Test", Id = 2};
                 facilities.Add(facility);
-                var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal());
+                var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal(), mapper);
                 facilityManagement.Delete(facility.Id);
                 Assert.False(facilities.Any());
             }
@@ -113,7 +121,7 @@ namespace Urbagestion.Model.Test
             
             using (var dbContext = GetContext())
             {
-                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal()))
+                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal(), mapper))
                 {
                     facilityManagement.Delete(facility.Id);
                     facility = facilityManagement.GetById(facility.Id);
@@ -127,7 +135,7 @@ namespace Urbagestion.Model.Test
         {
             using (var dbContext = GetContext())
             {
-                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal()))
+                using (var facilityManagement = new FacilityManagement(dbContext, GetAdminPrincipal(), mapper))
                 {
                     Assert.Throws<BussinesException>(() => facilityManagement.GetById(int.MaxValue));
                 }

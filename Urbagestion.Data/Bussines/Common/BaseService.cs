@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Principal;
-using System.Threading;
+using AutoMapper;
 using Urbagestion.Model.Common;
+using Urbagestion.Model.Extensions;
 using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
 using Urbagestion.Util;
 
 namespace Urbagestion.Model.Bussines.Common
 {
-    public abstract class BaseService<T> : IDisposable where T : class, IHasIdentity
+    public abstract class BaseService<T> : IDisposable where T : class, IHasIdentity, IAuditableEntity
     {
         private readonly IPrincipal principal;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IMapper mapper;
 
         protected IUnitOfWork UnitOfWork => unitOfWork;
 
         protected IPrincipal Principal => principal;
 
-        protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal)
+        protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal, IMapper mapper)
         {
             this.principal = principal;
             if (!principal.Identity.IsAuthenticated) throw new UnauthorizedAccessException();
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
         public void Dispose()
@@ -35,25 +38,13 @@ namespace Urbagestion.Model.Bussines.Common
         protected virtual T Create(T entity)
         {
             
-            SetAuditFields(entity, true);
+            principal.SetAuditFields(entity);
             unitOfWork.Add(entity);
             return entity;
         }
 
 
-        private void SetAuditFields(object entity, bool isBeenCreated)
-        {
-            if (entity is IAuditableEntity auditable)
-            {
-                auditable.UpdatedDate = DateTime.Now;
-                auditable.UpdatedBy = principal.Identity.Name;
-                if (!isBeenCreated) return;
-                auditable.CreatedBy = principal.Identity.Name;
-                auditable.CreationdDate = DateTime.Now;
-
-            }
-            
-        }
+        
 
         protected virtual void Delete(T entity)
         {
@@ -86,8 +77,11 @@ namespace Urbagestion.Model.Bussines.Common
             
             try
             {
-                SetAuditFields(entity, false);
+                var dbEntity = GetById(entity.Id);
+                mapper.Map(dbEntity, entity);
+                principal.SetAuditFields(entity);
                 unitOfWork.Update(entity);
+                unitOfWork.Complete();
                 return entity;
             }
             catch (Exception e)

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Principal;
+using AutoMapper;
 using Urbagestion.Model.Bussines.Common;
 using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Common;
@@ -10,7 +11,7 @@ namespace Urbagestion.Model.Bussines.Implementation
 {
     public class FacilityManagement : BaseService<Facility>, IFacilityManagement
     {
-        public FacilityManagement(IUnitOfWork unitOfWork, IPrincipal principal) : base(unitOfWork, principal)
+        public FacilityManagement(IUnitOfWork unitOfWork, IPrincipal principal, IMapper mapper) : base(unitOfWork, principal, mapper)
         {
         }
 

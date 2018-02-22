@@ -37,41 +37,18 @@
             @Html.DisplayFor(model => model.CloseAt)
         </dd>
         @if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
-    {
-        <dt>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsActive)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreationdDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreationdDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdatedDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UpdatedDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdatedBy)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UpdatedBy)
-        </dd>
-}
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.IsActive)
+            </dd>
+        }
 
     </dl>
 </div>
+
 <div>
     @if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
     {

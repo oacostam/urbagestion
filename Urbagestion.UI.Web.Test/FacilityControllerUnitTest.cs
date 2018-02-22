@@ -61,7 +61,7 @@ namespace Urbagestion.UI.Web.Test
             //Setup
             var facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object);
             //Act
-            var actionResult = facilityController.Delete(new RequestBase(){Id = null});
+            var actionResult = facilityController.Delete(null);
             //Verify
             Assert.True(((StatusCodeResult) actionResult).StatusCode == (int) HttpStatusCode.BadRequest);
         }
@@ -95,7 +95,7 @@ namespace Urbagestion.UI.Web.Test
             });
             var facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object);
             //Act
-            var actionResult = facilityController.Delete(new RequestBase {Id = 1});
+            var actionResult = facilityController.Delete(1);
             //Verify
             Assert.True(((RedirectToActionResult) actionResult).ActionName == nameof(facilityController.Index));
         }

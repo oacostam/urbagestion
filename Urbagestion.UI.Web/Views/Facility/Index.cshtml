@@ -3,14 +3,14 @@
 @model PageResult<Urbagestion.UI.Web.Models.FacilityViewModels.FacilityIndexViewModel[]>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Instalaciones";
 }
 
-<h2>Index</h2>
+<h2>Instalaciones</h2>
 @if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
 {
     <p>
-        <a asp-action="Create">Crear nueva</a>
+        <a asp-action="Create">Crear instalación</a>
     </p>
 }
 <table class="table">

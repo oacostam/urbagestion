@@ -43,10 +43,15 @@ namespace Urbagestion.DataAccess.Migrations
                     b.Property<decimal?>("Price")
                         .IsRequired();
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 
@@ -71,10 +76,15 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 
@@ -95,10 +105,15 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.Property<int?>("UserId");
 
@@ -129,12 +144,17 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<DateTime>("ReservationDate");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<TimeSpan>("Starts");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.Property<int>("UserId");
 

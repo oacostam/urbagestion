@@ -7,9 +7,13 @@ namespace Urbagestion.Model.Models
 {
     public class Facility : Entity
     {
-        [MaxLength(50)] [Required] public string Name { get; set; }
+        [MaxLength(50)] 
+        [Required] 
+        public string Name { get; set; }
 
-        [Range(0, int.MaxValue)] [Required] public decimal? Price { get; set; }
+        [Range(0, int.MaxValue)] 
+        [Required] 
+        public decimal? Price { get; set; }
 
         public TimeSpan OpensAt { get; set; }
 

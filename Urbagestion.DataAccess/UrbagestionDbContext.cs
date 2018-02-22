@@ -20,7 +20,7 @@ namespace Urbagestion.DataAccess
 
         public IQueryable<T> GetEntitySet<T>() where T : class, IHasIdentity
         {
-            return Set<T>();
+            return Set<T>().AsNoTracking();
         }
         
 
@@ -46,6 +46,7 @@ namespace Urbagestion.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
             //Many to many join table
             builder.Entity<UserGroup>().HasKey(k => new {k.UserId, k.GroupId});
             // Unique indexes

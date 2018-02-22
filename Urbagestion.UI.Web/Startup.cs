@@ -34,8 +34,7 @@ namespace Urbagestion.UI.Web
         {
             //Security services
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IPrincipal>(
-                provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
 
             // Order matters. 
             // Adds config as singleton.
@@ -94,14 +93,14 @@ namespace Urbagestion.UI.Web
 
 
             // Migrate and seed db
-            //using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            //{
-            //    if (serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().AllMigrationsApplied()) return;
-            //    serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Database.Migrate();
-            //    serviceScope.ServiceProvider.GetService<RoleManager<Role>>().CreateDefaultRoles();
-            //    serviceScope.ServiceProvider.GetService<UserManager<User>>().CreateDefaultAdmin();
-            //    serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Seed();
-            //}
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().AllMigrationsApplied()) return;
+                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetService<RoleManager<Role>>().CreateDefaultRoles();
+                serviceScope.ServiceProvider.GetService<UserManager<User>>().CreateDefaultAdmin();
+                serviceScope.ServiceProvider.GetService<UrbagestionDbContext>().Seed();
+            }
         }
     }
 }

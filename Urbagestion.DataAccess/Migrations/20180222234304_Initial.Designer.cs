@@ -11,7 +11,7 @@ using Urbagestion.DataAccess;
 namespace Urbagestion.DataAccess.Migrations
 {
     [DbContext(typeof(UrbagestionDbContext))]
-    [Migration("20180213212212_Initial")]
+    [Migration("20180222234304_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,10 +44,15 @@ namespace Urbagestion.DataAccess.Migrations
                     b.Property<decimal?>("Price")
                         .IsRequired();
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 
@@ -72,10 +77,15 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.HasKey("Id");
 
@@ -96,10 +106,15 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<bool>("IsActive");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.Property<int?>("UserId");
 
@@ -130,12 +145,17 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<DateTime>("ReservationDate");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<TimeSpan>("Starts");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired();
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .IsConcurrencyToken();
 
                     b.Property<int>("UserId");
 
