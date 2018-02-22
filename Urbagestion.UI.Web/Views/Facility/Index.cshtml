@@ -48,7 +48,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
-    
+            <td>@Html.ActionLink("Reservar", "Create", "Reservation",new { facilityid = item.Id })</td>
             <td>
                 @if (User.HasClaim(ClaimTypes.Role, MasterData.RoleAdmin))
                 {

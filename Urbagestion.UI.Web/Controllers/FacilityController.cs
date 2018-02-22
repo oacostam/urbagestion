@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Urbagestion.Model.Bussines.Interfaces;
@@ -20,7 +18,8 @@ namespace Urbagestion.UI.Web.Controllers
         private readonly ILogger logger;
         private readonly IMapper mapper;
 
-        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper, ILogger<FacilityController> logger)
+        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper,
+            ILogger<FacilityController> logger)
         {
             this.facilityManagement = facilityManagement;
             this.mapper = mapper;
@@ -47,7 +46,7 @@ namespace Urbagestion.UI.Web.Controllers
             }
         }
 
-        // GET: Facility/Details/5
+        
         public ActionResult Details(int id)
         {
             var facilities = facilityManagement.GetById(id);
@@ -61,10 +60,11 @@ namespace Urbagestion.UI.Web.Controllers
             var facilityModel = new FacilityIndexViewModel();
             return View(facilityModel);
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.AdminRoleName)]
         public ActionResult Create(FacilityIndexViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -75,7 +75,7 @@ namespace Urbagestion.UI.Web.Controllers
                     facilityManagement.Create(facility);
                     return RedirectToAction(nameof(Index));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.LogError(new EventId(LogEvents.CreateError), ex, ex.Message);
                     return View("Error");
@@ -83,31 +83,30 @@ namespace Urbagestion.UI.Web.Controllers
 
             return RedirectToAction("Create", viewModel);
         }
-        
 
+
+        [Authorize(Roles = Role.AdminRoleName)]
         public ActionResult Edit(int id)
         {
             var facilities = facilityManagement.GetById(id);
             var result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
             return View(result);
         }
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role.AdminRoleName)]
         public ActionResult Edit(FacilityIndexViewModel facilityViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(facilityViewModel);
-            }
+            if (!ModelState.IsValid) return View(facilityViewModel);
             try
             {
-                Facility facility = mapper.Map<Facility>(facilityViewModel);
+                var facility = mapper.Map<Facility>(facilityViewModel);
                 facilityManagement.Update(facility);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(new EventId(LogEvents.UpdateError), ex, ex.Message);
                 return View("Error");
@@ -133,7 +132,7 @@ namespace Urbagestion.UI.Web.Controllers
                 facilityManagement.Delete(request.Id);
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(new EventId(LogEvents.UpdateError), ex, ex.Message);
                 return View("Error");
