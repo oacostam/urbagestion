@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Models;
 using Urbagestion.UI.Web.Controllers;
-using Urbagestion.UI.Web.Models;
 using Urbagestion.UI.Web.Models.FacilityViewModels;
+using Urbagestion.UI.Web.Test.Class;
 using Xunit;
 
 namespace Urbagestion.UI.Web.Test
@@ -20,9 +20,15 @@ namespace Urbagestion.UI.Web.Test
     {
         public FacilityControllerUnitTest()
         {
-            facilities = new List<Facility>();
-            logger = new Mock<ILogger<FacilityController>>();
-            facilityManagement = new Mock<IFacilityManagement>();
+            var facilities = new List<Facility>
+            {
+                new Facility
+                {
+                    Id = 1
+                }
+            };
+            var logger = new Mock<ILogger<FacilityController>>();
+            var facilityManagement = new Mock<IFacilityManagement>();
             facilityManagement.Setup(s => s.Create(It.IsAny<Facility>())).Returns((Facility f) =>
             {
                 var maxId = facilities.Any() ? facilities.Max(m => m.Id) : 0;
@@ -30,7 +36,7 @@ namespace Urbagestion.UI.Web.Test
                 facilities.Add(f);
                 return f;
             });
-            mapper = new Mock<IMapper>();
+            var mapper = new Mock<IMapper>();
             mapper.Setup(s => s.Map<FacilityIndexViewModel, Facility>(It.IsAny<FacilityIndexViewModel>())).Returns(
                 (FacilityIndexViewModel m) =>
                 {
@@ -46,31 +52,22 @@ namespace Urbagestion.UI.Web.Test
                         IsActive = m.IsActive
                     };
                 });
+            facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext {User = TestSecurityHelper.GetAdminClaimsPrincipal()}
+                }
+            };
         }
 
 
-        private readonly Mock<ILogger<FacilityController>> logger;
-        private readonly Mock<IFacilityManagement> facilityManagement;
-        private readonly List<Facility> facilities;
-        private readonly Mock<IMapper> mapper;
-
-
-        [Fact]
-        public void DeleteWithNullIdReturnsHttp400()
-        {
-            //Setup
-            var facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object);
-            //Act
-            var actionResult = facilityController.Delete(null);
-            //Verify
-            Assert.True(((StatusCodeResult) actionResult).StatusCode == (int) HttpStatusCode.BadRequest);
-        }
+        private readonly FacilityController facilityController;
 
         [Fact]
         public void AddFacilityReturnToIndex()
         {
             //Setup
-            var facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object);
             //Act
             var actionResult = facilityController.Create(new FacilityIndexViewModel
             {
@@ -89,15 +86,20 @@ namespace Urbagestion.UI.Web.Test
         public void DeleteFacilityReturnToIndex()
         {
             //Setup
-            facilities.Add(new Facility
-            {
-                Id = 1
-            });
-            var facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object);
             //Act
-            var actionResult = facilityController.Delete(1);
+            var actionResult = facilityController.Delete(new FacilityIndexViewModel {Id = 1});
             //Verify
             Assert.True(((RedirectToActionResult) actionResult).ActionName == nameof(facilityController.Index));
+        }
+
+        [Fact]
+        public void DeleteWithNullReturnsToIndexView()
+        {
+            //Setup
+            //Act
+            var actionResult = facilityController.Delete(null);
+            //Verify
+            Assert.True(((ViewResult) actionResult).ViewName == "Index");
         }
     }
 }

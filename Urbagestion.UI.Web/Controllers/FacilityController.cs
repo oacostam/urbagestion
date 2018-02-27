@@ -112,21 +112,13 @@ namespace Urbagestion.UI.Web.Controllers
                 return View("Error");
             }
         }
-
-        // GET: Facility/Delete/5
-        public ActionResult Delete(int id)
-        {
-            var facilities = facilityManagement.GetById(id);
-            var result = mapper.Map<Facility, FacilityIndexViewModel>(facilities);
-            return View(result);
-        }
-
-        // POST: Facility/Delete/5
+        
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(FacilityIndexViewModel request)
         {
+            if (request == null || !ModelState.IsValid) return View("Index");
             try
             {
                 facilityManagement.Delete(request.Id);

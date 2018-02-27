@@ -204,7 +204,8 @@ namespace Urbagestion.UI.Web.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Name = model.Name,
-                    MiddleName = model.FirstLastName
+                    MiddleName = model.FirstLastName, 
+                    Address = model.Address
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Urbagestion.DataAccess\Urbagestion.DataAccess.csproj" />
     <ProjectReference Include="..\Urbagestion.Data\Urbagestion.Model.csproj" />
+    <ProjectReference Include="..\Urbagestion.UI.Web\Urbagestion.UI.Web.csproj" />
   </ItemGroup>
 
 </Project>
