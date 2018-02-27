@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,7 @@ using Urbagestion.Model.Interfaces;
 namespace Urbagestion.Model.Models
 {
     [Table("Users")]
-    public class User : IdentityUser<int>, IHasIdentity
+    public class User : IdentityUser<int>, IHasIdentity, IAuditableEntity
     {
         public bool IsCoordinator { get; set; } = false;
 
@@ -25,5 +26,17 @@ namespace Urbagestion.Model.Models
 
         [Required]
         public string MiddleName { get; set; }
+
+        [Required]
+        public DateTime CreationdDate { get; set; }
+
+        [Required]
+        public string CreatedBy { get; set; }
+
+        [Required]
+        public DateTime UpdatedDate { get; set; }
+
+        [Required]
+        public string UpdatedBy { get; set; }
     }
 }

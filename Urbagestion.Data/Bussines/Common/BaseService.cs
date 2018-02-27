@@ -51,6 +51,7 @@ namespace Urbagestion.Model.Bussines.Common
             try
             {
                 unitOfWork.Delete(entity);
+                unitOfWork.Complete();
             }
             catch (Exception e)
             {
@@ -60,16 +61,22 @@ namespace Urbagestion.Model.Bussines.Common
 
         public virtual T[] GetAll(int page, int size, out int total, string orderBy, SortOrder sortOrder)
         {
-            total = unitOfWork.GetEntitySet<T>().Count();
+            total = unitOfWork.Count<T>();
             var skipRows = (page - 1) * size;
             var query = unitOfWork.GetEntitySet<T>();
             query = query.Where(e => e.IsActive);
+            query = SortQuery(orderBy, sortOrder, query);
+            return query.Skip(skipRows).Take(size).ToArray();
+        }
+
+        private static IQueryable<T> SortQuery(string orderBy, SortOrder sortOrder, IQueryable<T> query)
+        {
             var propertyInfo = typeof(T).GetProperty(orderBy);
             if (propertyInfo != null)
                 query = sortOrder == SortOrder.Asc
                     ? query.OrderBy(x => propertyInfo.GetValue(x, null))
                     : query.OrderByDescending(x => propertyInfo.GetValue(x, null));
-            return query.Skip(skipRows).Take(size).ToArray();
+            return query;
         }
 
         protected virtual T Update(T entity)

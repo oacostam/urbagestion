@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Urbagestion.Model.Interfaces;
@@ -18,16 +20,30 @@ namespace Urbagestion.DataAccess
             return SaveChanges();
         }
 
-        public IQueryable<T> GetEntitySet<T>() where T : class, IHasIdentity
+        public IEnumerable<T> Find<T, TKey>(Func<T, bool> filter, Func<T, TKey> orderBy = null) where T : class, IHasIdentity
         {
-            return Set<T>().AsNoTracking();
+            if (orderBy != null) 
+                return Set<T>().Where(filter).OrderBy(orderBy).ToList();
+            return Set<T>().Where(filter).ToList();
         }
-        
 
+        public T GetById<T>(int id) where T : class, IHasIdentity
+        {
+            return Find<T>(new []{id});
+        }
+
+        
         public new T Update<T>(T entity) where T : class, IHasIdentity
         {
             Set<T>().Update(entity);
             return entity;
+        }
+
+        public int Count<T>(Func<T, bool> filter = null) where T : class, IHasIdentity
+        {
+            if (filter != null)
+                return Set<T>().Count(filter);
+            return Set<T>().Count();
         }
 
         public void Delete<T>(T entity) where T : class, IHasIdentity
@@ -40,9 +56,13 @@ namespace Urbagestion.DataAccess
             Set<T>().Add(entity);
             return entity;
         }
-        
 
-        
+        public IQueryable<T> GetEntitySet<T>() where T : class, IHasIdentity, IAuditableEntity
+        {
+            return Set<T>();
+        }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

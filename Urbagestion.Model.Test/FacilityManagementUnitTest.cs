@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using Moq;
@@ -8,7 +7,7 @@ using Urbagestion.Model.Bussines.Implementation;
 using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
-using Urbagestion.UI.Web.Models.FacilityViewModels;
+using Urbagestion.UI.Web.Automapper;
 using Xunit;
 
 namespace Urbagestion.Model.Test
@@ -17,23 +16,8 @@ namespace Urbagestion.Model.Test
     {
         public FacilityManagementUnitTest()
         {
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(s => s.Map<FacilityIndexViewModel, Facility>(It.IsAny<FacilityIndexViewModel>())).Returns(
-                (FacilityIndexViewModel m) =>
-                {
-                    Debug.Assert(m.CloseAt != null, "m.CloseAt != null");
-                    Debug.Assert(m.OpensAt != null, "m.OpensAt != null");
-                    return new Facility
-                    {
-                        CloseAt = m.CloseAt.Value,
-                        Id = m.Id,
-                        Price = m.Price,
-                        Name = m.Name,
-                        OpensAt = m.OpensAt.Value,
-                        IsActive = m.IsActive
-                    };
-                });
-            mapper = mapperMock.Object;
+            Mapper.Initialize(expression => expression.AddProfiles(typeof(MappingProfile)));
+            mapper = Mapper.Instance;
         }
 
         private readonly List<Facility> facilities = new List<Facility>();
@@ -68,7 +52,7 @@ namespace Urbagestion.Model.Test
             using (var dbContext = GetContext())
             {
                 using (var facilityManagement = new FacilityManagement(dbContext,
-                    TestSecurityExtensions.GetGenericPrincipalAdmin(), mapper))
+                    TestHelper.GetGenericPrincipalAdmin(), mapper))
                 {
                     facilityManagement.Create(new Facility {Name = "Test"});
                     Assert.Throws<BussinesException>(() => facilityManagement.Create(new Facility {Name = "Test"}));
@@ -82,7 +66,7 @@ namespace Urbagestion.Model.Test
             using (var ctx = GetContext())
             {
                 using (var facilityManagement =
-                    new FacilityManagement(ctx, TestSecurityExtensions.GetGenericPrincipalAdmin(), mapper))
+                    new FacilityManagement(ctx, TestHelper.GetGenericPrincipalAdmin(), mapper))
                 {
                     var facility = new Facility {Name = "Test"};
                     facilityManagement.Create(facility);
@@ -99,7 +83,7 @@ namespace Urbagestion.Model.Test
                 var facility = new Facility {Name = "Test", Id = 2};
                 facilities.Add(facility);
                 var facilityManagement =
-                    new FacilityManagement(dbContext, TestSecurityExtensions.GetGenericPrincipalAdmin(), mapper);
+                    new FacilityManagement(dbContext, TestHelper.GetGenericPrincipalAdmin(), mapper);
                 facilityManagement.Delete(facility.Id);
                 Assert.False(facilities.Any());
             }
@@ -135,7 +119,7 @@ namespace Urbagestion.Model.Test
             using (var dbContext = GetContext())
             {
                 using (var facilityManagement = new FacilityManagement(dbContext,
-                    TestSecurityExtensions.GetGenericPrincipalAdmin(), mapper))
+                    TestHelper.GetGenericPrincipalAdmin(), mapper))
                 {
                     facilityManagement.Delete(facility.Id);
                     facility = facilityManagement.GetById(facility.Id);
@@ -150,7 +134,7 @@ namespace Urbagestion.Model.Test
             using (var dbContext = GetContext())
             {
                 using (var facilityManagement = new FacilityManagement(dbContext,
-                    TestSecurityExtensions.GetGenericPrincipalAdmin(), mapper))
+                    TestHelper.GetGenericPrincipalAdmin(), mapper))
                 {
                     Assert.Throws<BussinesException>(() => facilityManagement.GetById(int.MaxValue));
                 }

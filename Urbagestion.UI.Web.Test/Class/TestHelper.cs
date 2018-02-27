@@ -1,9 +1,12 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
 
 namespace Urbagestion.UI.Web.Test.Class
 {
-    public static class TestSecurityHelper
+    public static class TestHelper
     {
         public static ClaimsPrincipal GetAdminClaimsPrincipal()
         {
@@ -14,5 +17,7 @@ namespace Urbagestion.UI.Web.Test.Class
                 new Claim(ClaimTypes.Role, Role.AdminRoleName)
             }));
         }
+
+        
     }
 }

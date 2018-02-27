@@ -2,7 +2,7 @@
 {
     public interface IHasIdentity
     {
-        int Id { get; }
+        int Id { get; set; }
 
         bool IsActive { get; set; }
     }

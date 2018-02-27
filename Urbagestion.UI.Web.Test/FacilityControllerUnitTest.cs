@@ -56,7 +56,7 @@ namespace Urbagestion.UI.Web.Test
             {
                 ControllerContext = new ControllerContext
                 {
-                    HttpContext = new DefaultHttpContext {User = TestSecurityHelper.GetAdminClaimsPrincipal()}
+                    HttpContext = new DefaultHttpContext {User = TestHelper.GetAdminClaimsPrincipal()}
                 }
             };
         }

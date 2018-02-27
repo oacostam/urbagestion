@@ -18,13 +18,18 @@ namespace Urbagestion.Model.Bussines.Implementation
         public new Facility Create(Facility entity)
         {
             CheckNotNullAndAdminRigths(entity, Principal);
+            CheckIfExistsOtherWithSameName(entity);
+            entity = base.Create(entity);
+            Complete();
+            return entity;
+        }
+
+        private void CheckIfExistsOtherWithSameName(Facility entity)
+        {
             var otherWithSameName = UnitOfWork.GetEntitySet<Facility>().FirstOrDefault(f => f.Name == entity.Name);
             if (otherWithSameName != null)
                 throw new BussinesException(
                     "Ya existe una instalación con ese nombre, por favor, elija un nombre único.");
-            entity = base.Create(entity);
-            Complete();
-            return entity;
         }
 
         public void Delete(int id)
