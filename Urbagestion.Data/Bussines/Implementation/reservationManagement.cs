@@ -3,16 +3,18 @@ using System.Linq;
 using System.Security.Principal;
 using AutoMapper;
 using Urbagestion.Model.Bussines.Common;
+using Urbagestion.Model.Bussines.Interfaces;
 using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
 using Urbagestion.Model.Models;
 
 namespace Urbagestion.Model.Bussines.Implementation
 {
-    public class ReservationManagement:BaseService<Reservation>
+    public class ReservationManagement:BaseService<Reservation>, IReservationManagement
     {
         public ReservationManagement(IUnitOfWork unitOfWork, IPrincipal principal, IMapper mapper) : base(unitOfWork, principal, mapper)
         {
+            
         }
 
 

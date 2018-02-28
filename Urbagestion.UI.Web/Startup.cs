@@ -52,9 +52,14 @@ namespace Urbagestion.UI.Web
                 .AddEntityFrameworkStores<UrbagestionDbContext>()
                 .AddDefaultTokenProviders();
             services.AddTransient<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory<User>>();
+
+            #region TransientServices 
             // Add application services as transients.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IFacilityManagement, FacilityManagement>();
+            services.AddTransient<IReservationManagement, ReservationManagement>();
+            #endregion
+            
             // Add automapper service.
             services.AddAutoMapper();
             services.AddMvc().AddSessionStateTempDataProvider();

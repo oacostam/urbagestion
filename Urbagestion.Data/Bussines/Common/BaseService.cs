@@ -22,10 +22,10 @@ namespace Urbagestion.Model.Bussines.Common
 
         protected BaseService(IUnitOfWork unitOfWork, IPrincipal principal, IMapper mapper)
         {
-            this.principal = principal;
+            this.principal = principal ?? throw new ArgumentNullException(nameof(principal));
             if (!principal.Identity.IsAuthenticated) throw new UnauthorizedAccessException();
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
+            this.unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public void Dispose()
