@@ -38,5 +38,9 @@ namespace Urbagestion.Model.Models
 
         [Required]
         public string UpdatedBy { get; set; }
+
+        [Timestamp]
+        [ConcurrencyCheck]
+        public byte[] RowVersion { get; set; }
     }
 }

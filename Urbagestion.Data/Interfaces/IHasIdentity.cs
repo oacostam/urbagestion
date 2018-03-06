@@ -5,5 +5,7 @@
         int Id { get; set; }
 
         bool IsActive { get; set; }
+
+        byte[] RowVersion { get; set; }
     }
 }

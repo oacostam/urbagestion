@@ -11,7 +11,7 @@ using Urbagestion.DataAccess;
 namespace Urbagestion.DataAccess.Migrations
 {
     [DbContext(typeof(UrbagestionDbContext))]
-    [Migration("20180222234304_Initial")]
+    [Migration("20180306214808_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,6 +225,11 @@ namespace Urbagestion.DataAccess.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired();
+
+                    b.Property<DateTime>("CreationdDate");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -256,9 +261,18 @@ namespace Urbagestion.DataAccess.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired();
+
+                    b.Property<DateTime>("UpdatedDate");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);

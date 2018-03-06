@@ -18,8 +18,7 @@ namespace Urbagestion.UI.Web.Controllers
         private readonly ILogger logger;
         private readonly IMapper mapper;
 
-        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper,
-            ILogger<FacilityController> logger)
+        public FacilityController(IFacilityManagement facilityManagement, IMapper mapper, ILogger<FacilityController> logger)
         {
             this.facilityManagement = facilityManagement;
             this.mapper = mapper;
@@ -46,7 +45,7 @@ namespace Urbagestion.UI.Web.Controllers
             }
         }
 
-        
+
         public ActionResult Details(int id)
         {
             var facilities = facilityManagement.GetById(id);
@@ -112,7 +111,7 @@ namespace Urbagestion.UI.Web.Controllers
                 return View("Error");
             }
         }
-        
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]

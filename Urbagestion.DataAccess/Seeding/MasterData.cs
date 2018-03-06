@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +19,23 @@ namespace Urbagestion.DataAccess.Seeding
         public static void CreateDefaultAdmin(this UserManager<User> userManager)
         {
             var user = userManager.FindByNameAsync("AdminUrbagestion").Result;
-            if (user == null)
+            if (user != null) return;
+            user = new User
             {
-                user = new User {UserName = "admin@none.com", MiddleName = "Dummy",Email = "admin@none.com", Name = "Admin", IsActive = true, Address = "Dummy"};
-                userManager.CreateAsync(user, "Admin123").Wait();
-                userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin")).Wait();
-                userManager.AddToRoleAsync(user, RoleAdmin).Wait();
-            }
+                UserName = "admin@none.com",
+                MiddleName = "Dummy",
+                Email = "admin@none.com",
+                Name = "Admin",
+                IsActive = true,
+                Address = "Dummy",
+                CreatedBy = "Install",
+                CreationdDate = DateTime.Now,
+                UpdatedBy = "Install",
+                UpdatedDate = DateTime.Now
+            };
+            userManager.CreateAsync(user, "Admin123").Wait();
+            userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Admin")).Wait();
+            userManager.AddToRoleAsync(user, RoleAdmin).Wait();
         }
 
         public static void CreateDefaultRoles(this RoleManager<Role> roleManager)
