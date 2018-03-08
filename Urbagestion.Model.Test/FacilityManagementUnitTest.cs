@@ -16,7 +16,7 @@ namespace Urbagestion.Model.Test
     {
         public FacilityManagementUnitTest()
         {
-            Mapper.Initialize(expression => expression.AddProfiles(typeof(MappingProfile)));
+            Mapper.Initialize(expression => expression.AddProfiles(typeof(WebUiMappingProfile)));
             mapper = Mapper.Instance;
         }
 

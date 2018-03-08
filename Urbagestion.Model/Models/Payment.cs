@@ -9,10 +9,11 @@ namespace Urbagestion.Model.Models
         {
         }
         
-        public Payment(int id, decimal amount, Facility facility):base(id)
+        public Payment(int id, decimal amount, Facility facility)
         {
             if(amount <= 0)
                 throw new BussinesException("No se permiten pagos con cantidad 0 o negativos.");
+            Id = id;
             Amount = amount;
             Facility = facility ?? throw new ArgumentNullException(nameof(facility));
         }

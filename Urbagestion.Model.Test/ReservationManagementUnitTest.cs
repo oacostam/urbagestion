@@ -16,7 +16,7 @@ namespace Urbagestion.Model.Test
     {
         public ReservationManagementUnitTest()
         {
-            Mapper.Initialize(expression => expression.AddProfiles(typeof(MappingProfile)));
+            Mapper.Initialize(expression => expression.AddProfiles(typeof(WebUiMappingProfile)));
             _reservations = new List<Reservation>();
             _facilities = new List<Facility>();
             _users = new List<User>();

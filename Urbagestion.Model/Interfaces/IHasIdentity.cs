@@ -2,10 +2,10 @@
 {
     public interface IHasIdentity
     {
-        int Id { get; set; }
+        int Id { get; }
 
         bool IsActive { get; set; }
 
-        byte[] RowVersion { get; set; }
+        byte[] RowVersion { get; }
     }
 }

@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.UI.Web", "Urbagestion.UI.Web\Urbagestion.UI.Web.csproj", "{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Model", "Urbagestion.Data\Urbagestion.Model.csproj", "{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.DataAccess", "Urbagestion.DataAccess\Urbagestion.DataAccess.csproj", "{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{4D24A9E8-AC0F-42C1-9034-C34BC6881C5E}"
@@ -21,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.UI.Web.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Model.Test", "Urbagestion.Model.Test\Urbagestion.Model.Test.csproj", "{11E5A5E5-00BD-4A46-9404-396934680B3F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Urbagestion.Model", "Urbagestion.Model\Urbagestion.Model.csproj", "{809805CC-11FD-40F2-9B39-148B15CF0222}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,10 +31,6 @@ Global
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7800D8D2-0A2E-4C7D-AAF5-FA15486376D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DDBD557-F855-4789-BFBB-5109BBB8ED6E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E77CB48D-F6BF-4ACB-B48A-CD101C12E264}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11E5A5E5-00BD-4A46-9404-396934680B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{809805CC-11FD-40F2-9B39-148B15CF0222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{809805CC-11FD-40F2-9B39-148B15CF0222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{809805CC-11FD-40F2-9B39-148B15CF0222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{809805CC-11FD-40F2-9B39-148B15CF0222}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

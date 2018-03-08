@@ -19,7 +19,6 @@ namespace Urbagestion.UI.Web.Models
         [Display(Name = "Fecha de creación")]
         public DateTime? CreationdDate { get; set; } = DateTime.Now;
         
-
         [DataType(DataType.Text)]
         [Display(Name = "Creado por")]
         public string CreatedBy {get; set;}

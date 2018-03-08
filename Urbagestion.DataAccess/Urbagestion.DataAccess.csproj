@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Urbagestion.Data\Urbagestion.Model.csproj" />
+    <ProjectReference Include="..\Urbagestion.Model\Urbagestion.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

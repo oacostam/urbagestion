@@ -38,19 +38,14 @@ namespace Urbagestion.UI.Web.Test
             });
             var mapper = new Mock<IMapper>();
             mapper.Setup(s => s.Map<FacilityIndexViewModel, Facility>(It.IsAny<FacilityIndexViewModel>())).Returns(
-                (FacilityIndexViewModel m) =>
+                (FacilityIndexViewModel m) => new Facility
                 {
-                    Debug.Assert(m.CloseAt != null, "m.CloseAt != null");
-                    Debug.Assert(m.OpensAt != null, "m.OpensAt != null");
-                    return new Facility
-                    {
-                        CloseAt = m.CloseAt.Value,
-                        Id = m.Id,
-                        Price = m.Price,
-                        Name = m.Name,
-                        OpensAt = m.OpensAt.Value,
-                        IsActive = m.IsActive
-                    };
+                    CloseAt = m.CloseAt,
+                    Id = m.Id,
+                    Price = m.Price,
+                    Name = m.Name,
+                    OpensAt = m.OpensAt,
+                    IsActive = m.IsActive
                 });
             facilityController = new FacilityController(facilityManagement.Object, mapper.Object, logger.Object)
             {
