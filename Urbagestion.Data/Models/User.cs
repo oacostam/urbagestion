@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Urbagestion.Model.Common;
 using Urbagestion.Model.Interfaces;
 
 namespace Urbagestion.Model.Models
@@ -12,9 +13,11 @@ namespace Urbagestion.Model.Models
     {
         public bool IsCoordinator { get; set; } = false;
 
-        public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<Reservation> Reservations { get;} = new HashSet<Reservation>();
 
-        public virtual ICollection<UserGroup> UserGroup { get; set; } = new HashSet<UserGroup>();
+        public virtual ICollection<UserGroup> UserGroup { get;} = new HashSet<UserGroup>();
+
+        public virtual ICollection<Payment> Payments { get; } = new HashSet<Payment>();
 
         [Required]
         public string Address { get; set; }
@@ -39,8 +42,20 @@ namespace Urbagestion.Model.Models
         [Required]
         public string UpdatedBy { get; set; }
 
-        [Timestamp]
-        [ConcurrencyCheck]
-        public byte[] RowVersion { get; set; }
+        [Timestamp] 
+        [ConcurrencyCheck] 
+        public byte[] RowVersion { get; } = null;
+
+        public void AddPayment(Payment payment)
+        {
+            if (payment == null) throw new ArgumentNullException(nameof(payment));
+            Payments.Add(payment);
+        }
+
+        public void BookFacility(Reservation reservation)
+        {
+            if (reservation == null) throw new ArgumentNullException(nameof(reservation));
+            
+        }
     }
 }
