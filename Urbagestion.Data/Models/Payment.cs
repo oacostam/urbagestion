@@ -1,12 +1,25 @@
-﻿using Urbagestion.Model.Common;
+﻿using System;
+using Urbagestion.Model.Common;
 
 namespace Urbagestion.Model.Models
 {
     public class Payment : Entity
     {
-        public decimal Amount { get; set; } = 0;
+        protected Payment()
+        {
+        }
+        
+        public Payment(int id, decimal amount, Facility facility):base(id)
+        {
+            if(amount <= 0)
+                throw new BussinesException("No se permiten pagos con cantidad 0 o negativos.");
+            Amount = amount;
+            Facility = facility ?? throw new ArgumentNullException(nameof(facility));
+        }
 
-        public User User { get; set; }
+        public decimal Amount { get; }
+
+        public Facility Facility { get; }
         
     }
 }
